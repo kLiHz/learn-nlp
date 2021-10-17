@@ -1,5 +1,5 @@
 # 自然语言处理实验
 
-- [实验报告模板](./report-template.md)
+- [实验报告模板](./misc/report-template.md)
 
 - [实验 1：互联网语料获取](./01/)

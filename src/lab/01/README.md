@@ -2,7 +2,7 @@
 
 编写程序自动抓取多网页内容
 
-{{#include ../author-info.html}}
+{{#include ../misc/author-info.html}}
 
 日期： 2021 年 9 月 29 日
 

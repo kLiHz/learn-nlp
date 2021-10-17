@@ -1,8 +1,8 @@
-# mdBook 模板
+# 学习自然语言处理
+
+Learn NLP
 
 该内容使用 [mdBook][mdbook] 构建 HTML 页面。
-
-请修改根目录下的 `book.toml` 文件。
 
 ## 使用说明
 
