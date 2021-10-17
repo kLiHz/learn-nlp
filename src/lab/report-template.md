@@ -2,7 +2,7 @@
 
 实验一
 
-{{#include ../author-info.html}}
+{{#include ./author-info.html}}
 
 日期： 2021 年 9 月 29 日
 
