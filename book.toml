@@ -3,7 +3,7 @@
 authors = ["henry_23"]
 # 标题
 title = "Learn NLP"
-language = "zh-cn"
+language = "zh-Hans"
 multilingual = false
 src = "src"
 
