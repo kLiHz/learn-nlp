@@ -16,7 +16,6 @@ methods = [
     ('BMM', BMM_cut)
 ]
 
-
 test_file_path = ["重庆大学", "西华大学"]
 
 tot_hits = {'FMM': 0, 'BMM': 0}
@@ -40,25 +39,9 @@ for path in test_file_path:
         
         tot_truth_cnt += len_truth
 
-print('FMM 分词结果：')
-print("jieba 分词总共的数目:", tot_truth_cnt)
-print("FMM   分词总共的数目:", tot_result_cnt['FMM'])
-print("FMM   分词正确的数目：", tot_hits['FMM'])
+import print_helper as helper
 
-P, R, F = calc_PRF(tot_hits['FMM'], tot_truth_cnt, tot_result_cnt['FMM'])
+# 打印统计信息
 
-print("准确率（P）：{:.5f} %".format(100 * P))
-print("回归率（R）：{:.5f} %".format(100 * R))
-print("F 值为：{}".format(F))
-
-
-print('BMM 分词结果：')
-print("jieba 分词总共的数目:", tot_truth_cnt)
-print("BMM   分词总共的数目:", tot_result_cnt['BMM'])
-print("BMM   分词正确的数目：", tot_hits['BMM'])
-
-P, R, F = calc_PRF(tot_hits['BMM'], tot_truth_cnt, tot_result_cnt['BMM'])
-
-print("准确率（P）：{:.5f} %".format(100 * P))
-print("回归率（R）：{:.5f} %".format(100 * R))
-print("F 值为：{}".format(F))
+helper.print_stat('FMM', tot_truth_cnt, tot_result_cnt['FMM'], tot_hits['FMM'])
+helper.print_stat('BMM', tot_truth_cnt, tot_result_cnt['BMM'], tot_hits['BMM'])
