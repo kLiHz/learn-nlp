@@ -22,5 +22,5 @@ def traverse(node, s=''):
         traverse(node['children'][key], s)
         s = s[:-1]
     if node['cnt'] > 0:
-        print(s)
+        yield s
 
