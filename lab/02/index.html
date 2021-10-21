@@ -213,14 +213,25 @@
 \text{Recall} = &amp; \frac{TP}{TP+FN} \\
 \end{align}
 \]</p>
+<p>实际评估一个系统时，应同时考虑 P 和 R，但同时要比较两个数值，很难做到一目了然。所以常采用综合两个值进行评价的办法，综合指标 F 值就是其中一种。计算公式如下：</p>
+<p>\[
+\text{F-score} = (1+\beta^2)\frac{P \times R}{\beta^2 \times P + R}
+\]</p>
+<p>其中，\(\beta\) 决定对 P 侧重还是对 R 侧重，通常设定为 1、2 或 \(\frac 1 2\)。\(\beta\) 取值为 1，即对二者一样重视，这时的 F-score 称为 \(F_1\) 值。</p>
 <h3 id="分词结果的评估"><a class="header" href="#分词结果的评估">分词结果的评估</a></h3>
 <p>机器学习中二分类的评估标准，无法直接应用于分词。</p>
+<p>在对汉语分词性能进行评估时，采用了常用的３个评测指标：准确率（P）、召回率（R）、综合指标 F 值（F）。准确率表示在切分的全部词语中，正确的所占的比值。召回率指在所有切分词语中（包括切分的和不应该忽略的），正确切分的词语所占的比值。准确率描述系统切分的词语中，正确的占多少。召回率表示应该得到的词语中，系统正确切分出了多少。计算公式如下：</p>
+<p>\[
+P = \frac{\text{准确切分的词语数}}{\text{切分出的所有词语数}}
+\]</p>
+<p>\[
+R = \frac{\text{准确切分的词语数}}{\text{应该切分的词语数}}
+\]</p>
 <p>若一字符串的分词结果为一系列单词，设每个单词按照其在文中的起止位置可记作区间 \([i,j]\)（\(0\leq i \leq j \leq n\)），那么标准答案对应的所有区间就可以构成一集合 \(A\)，作为正类，其他的区间则作为负类;同理，根据分词结果，可以得到集合 \(B\)。</p>
 <p>\[TP \cup FN = A \]</p>
 <p>\[TP \cup FP = B \]</p>
 <p>\[A \cap B = TP \]</p>
-<p>则 P、R 的计算公式：</p>
-<p>\(\text{Precision} = \frac{\vert A\cap B\vert}{\vert B \vert}\)，
+<p>则 P、R 的计算公式：\(\text{Precision} = \frac{\vert A\cap B\vert}{\vert B \vert}\)，
 \(\text{Recall} = \frac{\vert A\cap B\vert}{\vert A \vert}\)</p>
 <h2 id="三整体框架"><a class="header" href="#三整体框架">三、整体框架</a></h2>
 <p>主要分为功能模块和使用调用。详见主要程序模块。</p>
@@ -288,8 +299,8 @@ print('All words:')
 for w in trie.traverse(root):
     print(w)
 </code></pre>
-<p>从文件中加载字典到 Trie 树，并进行最大正向匹配、最大逆向匹配：</p>
-<p><a href="./FMM_BMM_trie.py">FMM_BMM_trie.py</a> （使用 Python 内建的 set 类型：<a href="./FMM_BMM.py">FMM_BMM.py</a>）</p>
+<p>从文件中加载字典到 Trie 树，以及进行最大正向匹配（FMM）、最大逆向匹配（BMM）的功能：</p>
+<p><a href="./FMM_BMM_trie.py">FMM_BMM_trie.py</a> </p>
 <pre><code class="language-python">from my_trie import *
 
 def load_wordlist(filename):
@@ -364,9 +375,14 @@ def BMM(sentence, wordlist, maxlen):
     tokens.reverse()
     return tokens
 </code></pre>
+<blockquote>
+<p>另有使用 Python 内建的 set 类型的版本：<a href="./FMM_BMM.py">FMM_BMM.py</a>。</p>
+</blockquote>
 <p>评估分词结果，以及计算 P、R、F 值：</p>
 <p><a href="./calc.py">calc.py</a></p>
-<pre><code class="language-python">special_characters = set(list(&quot;()[]+-*/&lt;&gt;|\\;:\&quot;\'\,.?!@#$%^&amp;~`\{\}（）【】《》，。？“”‘’；：——「」『』〔〕&quot;))
+<pre><code class="language-python">special_characters = set(list(
+    &quot;()[]+-*/&lt;&gt;|\\;:\&quot;\'\,.?!@#$%^&amp;~`\{\}（）【】《》，。？“”‘’；：——「」『』〔〕&quot;
+))
 
 #包括部分特殊字符，在进行分词比对时将特殊字符排除，以免对结果产生一定的影响
 
@@ -374,10 +390,10 @@ def calc_hits(truth, result):
     # 传入分词得到的结果（列表），以及“正确分词”结果
     cut_truth = [item for item in truth if item not in special_characters]
     cut_result = [item for item in result if item not in special_characters]
-    i = 0  # 指向 truth 中的 token
-    j = 0  # 指向 result 中的 token
-    l1 = 0 # i 所指向词串，对应在原句中的长度
-    l2 = 0 # j 所指向词串，对应在原句中的长度
+    i = 0       # 指向 truth 中的 token
+    j = 0       # 指向 result 中的 token
+    l1 = 0      # i 所指向词串，对应在原句中的长度
+    l2 = 0      # j 所指向词串，对应在原句中的长度
     hits = 0
     missmatches = set()
     while i &lt; len(cut_truth) and j &lt; len(cut_result):
@@ -391,18 +407,20 @@ def calc_hits(truth, result):
             if cut_truth[i] == cut_result[j]:
                 hits += 1
             else:
+                # 记录未匹配到的“新词”
                 missmatches.add(cut_truth[i])
             l1 += len(cut_truth[i])
             i += 1
             l2 += len(cut_result[j])
             j += 1
+    
     return hits, len(truth), len(result), missmatches
 
 
 def calc_PRF(hits, truth_len, result_len):
     P = hits / result_len       # precision
     R = hits / truth_len        # recall
-    F = (2 * P * R) / (P + R)   # F1
+    F = (2 * P * R) / (P + R)   # F_1
     return P, R, F
 </code></pre>
 <p>多文件处理：</p>
@@ -411,9 +429,12 @@ def calc_PRF(hits, truth_len, result_len):
 import os
 
 def cut_txt(file_name, cut_methods_list):
-    # 单个TXT文档处理，可以接收多个方法，
-    # cut_methods_list: [(&quot;name&quot;, method), ...]
-    # 以方法名作为键名，将其分词结果存储在字典中
+    &quot;&quot;&quot;
+    单个TXT文档处理，可以接收多个方法，
+    :param file_name:   要处理的文件名
+    :param cut_methods_list: 类似如下的列表 [(&quot;name&quot;, method), ...]
+    :return: 存储分词结果的字典，以方法名作为键名
+    &quot;&quot;&quot;
     results = dict()
     with open(file_name, &quot;r&quot;, encoding='utf-8') as f:
         for line in f:
@@ -425,6 +446,9 @@ def cut_txt(file_name, cut_methods_list):
 
 
 def write_results(file_name, results, delimiter='/', output_dir_prefix=''):
+    &quot;&quot;&quot;
+    将分词结果写出到文件
+    &quot;&quot;&quot;
     for foo_name in results.keys():
         out_file_name = os.path.join(
             output_dir_prefix, 
@@ -435,7 +459,12 @@ def write_results(file_name, results, delimiter='/', output_dir_prefix=''):
 
 
 def process_path(path, cut_methods_list):
-    #传入某大学的文件路径， 对其各个标签项下的内容进行处理，文本分类后再重新写入（html.txt）
+    &quot;&quot;&quot;
+    对目录下的所有文件进行处理
+    :param path: 目录名
+    :param cut_methods_list: 要采用的分词方法的列表
+    :return: 文件名及对应结果的生成器
+    &quot;&quot;&quot;
     ignore = ['href', '简介', 'segmented']
     for root, subdirs, files in os.walk(path):
         for f in files:
@@ -496,6 +525,23 @@ while True:
     print('Recall:    ', R)
     print('F:         ', F)
 </code></pre>
+<p>打印统计信息帮助函数：</p>
+<p><a href="./print_helper.py">print_helper.py</a></p>
+<pre><code class="language-python">from calc import calc_PRF
+
+def print_stat(foo_name, total_truth_cnt, total_result_cnt, total_hits):
+
+    print('{} 分词结果：'.format(foo_name))
+    print(&quot;{:&lt;8} 分词总共的数目：{}&quot;.format(foo_name, total_truth_cnt))
+    print(&quot;{:&lt;8} 分词总共的数目：{}&quot;.format(foo_name, total_result_cnt))
+    print(&quot;{:&lt;8} 分词正确的数目：{}&quot;.format(foo_name, total_hits))
+
+    P, R, F = calc_PRF(total_hits, total_truth_cnt, total_result_cnt)
+
+    print(&quot;准确率（P）：{:.5f} %&quot;.format(100 * P))
+    print(&quot;回归率（R）：{:.5f} %&quot;.format(100 * R))
+    print(&quot;F 值为：{}&quot;.format(F))
+</code></pre>
 <p>对文档进行分词尝试，对最大匹配算法进行评估，并记录新词：</p>
 <p><a href="./train.py">train.py</a></p>
 <pre><code class="language-python">import jieba
@@ -524,14 +570,9 @@ methods = [
     ('BMM', BMM_cut)
 ]
 
-print(&quot;Adding new words from training materials...&quot;)
-
-# 统计 FMM/BMM 分词结果正确的个数
-tot_hits = {'FMM': 0, 'BMM': 0}
-# 统计 FMM/BMM 分词结果的个数
-tot_result_cnt = {'FMM': 0, 'BMM': 0}
-# 统计 jieba 分词结果的个数
-tot_truth_cnt = 0
+tot_hits = {'FMM': 0, 'BMM': 0}         # 统计 FMM/BMM 分词结果正确的个数
+tot_result_cnt = {'FMM': 0, 'BMM': 0}   # 统计 FMM/BMM 分词结果的个数
+tot_truth_cnt = 0                       # 统计 jieba 分词结果的个数
 
 new_words = []
 
@@ -559,31 +600,12 @@ for path in trainning_file_path:
 
         write_results(filename, {'FMM': results[&quot;FMM&quot;]}, '/')
 
+import print_helper as helper
 
-print('FMM 分词结果：')
-print(&quot;jieba 分词总共的数目:&quot;, tot_truth_cnt)
-print(&quot;FMM   分词总共的数目:&quot;, tot_result_cnt['FMM'])
-print(&quot;FMM   分词正确的数目：&quot;, tot_hits['FMM'])
+# 打印统计信息
 
-P, R, F = calc_PRF(tot_hits['FMM'], tot_truth_cnt, tot_result_cnt['FMM'])
-
-print(&quot;准确率（P）：{:.5f} %&quot;.format(100 * P))
-print(&quot;回归率（R）：{:.5f} %&quot;.format(100 * R))
-print(&quot;F 值为：{}&quot;.format(F))
-
-
-print('BMM 分词结果：')
-print(&quot;jieba 分词总共的数目:&quot;, tot_truth_cnt)
-print(&quot;BMM   分词总共的数目:&quot;, tot_result_cnt['BMM'])
-print(&quot;BMM   分词正确的数目：&quot;, tot_hits['BMM'])
-
-P, R, F = calc_PRF(tot_hits['BMM'], tot_truth_cnt, tot_result_cnt['BMM'])
-
-print(&quot;准确率（P）：{:.5f} %&quot;.format(100 * P))
-print(&quot;回归率（R）：{:.5f} %&quot;.format(100 * R))
-print(&quot;F 值为：{}&quot;.format(F))
-
-# -----------------------------------------------------------------
+helper.print_stat('FMM', tot_truth_cnt, tot_result_cnt['FMM'], tot_hits['FMM'])
+helper.print_stat('BMM', tot_truth_cnt, tot_result_cnt['BMM'], tot_hits['BMM'])
 
 # 将新词添加入词典
 wordlist, cnt, maxlen = add_words(wordlist, cnt, maxlen, new_words)
@@ -610,7 +632,6 @@ methods = [
     ('BMM', BMM_cut)
 ]
 
-
 test_file_path = [&quot;重庆大学&quot;, &quot;西华大学&quot;]
 
 tot_hits = {'FMM': 0, 'BMM': 0}
@@ -634,28 +655,12 @@ for path in test_file_path:
         
         tot_truth_cnt += len_truth
 
-print('FMM 分词结果：')
-print(&quot;jieba 分词总共的数目:&quot;, tot_truth_cnt)
-print(&quot;FMM   分词总共的数目:&quot;, tot_result_cnt['FMM'])
-print(&quot;FMM   分词正确的数目：&quot;, tot_hits['FMM'])
+import print_helper as helper
 
-P, R, F = calc_PRF(tot_hits['FMM'], tot_truth_cnt, tot_result_cnt['FMM'])
+# 打印统计信息
 
-print(&quot;准确率（P）：{:.5f} %&quot;.format(100 * P))
-print(&quot;回归率（R）：{:.5f} %&quot;.format(100 * R))
-print(&quot;F 值为：{}&quot;.format(F))
-
-
-print('BMM 分词结果：')
-print(&quot;jieba 分词总共的数目:&quot;, tot_truth_cnt)
-print(&quot;BMM   分词总共的数目:&quot;, tot_result_cnt['BMM'])
-print(&quot;BMM   分词正确的数目：&quot;, tot_hits['BMM'])
-
-P, R, F = calc_PRF(tot_hits['BMM'], tot_truth_cnt, tot_result_cnt['BMM'])
-
-print(&quot;准确率（P）：{:.5f} %&quot;.format(100 * P))
-print(&quot;回归率（R）：{:.5f} %&quot;.format(100 * R))
-print(&quot;F 值为：{}&quot;.format(F))
+helper.print_stat('FMM', tot_truth_cnt, tot_result_cnt['FMM'], tot_hits['FMM'])
+helper.print_stat('BMM', tot_truth_cnt, tot_result_cnt['BMM'], tot_hits['BMM'])
 </code></pre>
 <h2 id="五实验结果"><a class="header" href="#五实验结果">五、实验结果</a></h2>
 <figure>

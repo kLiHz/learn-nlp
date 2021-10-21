@@ -24,14 +24,9 @@ methods = [
     ('BMM', BMM_cut)
 ]
 
-print("Adding new words from training materials...")
-
-# 统计 FMM/BMM 分词结果正确的个数
-tot_hits = {'FMM': 0, 'BMM': 0}
-# 统计 FMM/BMM 分词结果的个数
-tot_result_cnt = {'FMM': 0, 'BMM': 0}
-# 统计 jieba 分词结果的个数
-tot_truth_cnt = 0
+tot_hits = {'FMM': 0, 'BMM': 0}         # 统计 FMM/BMM 分词结果正确的个数
+tot_result_cnt = {'FMM': 0, 'BMM': 0}   # 统计 FMM/BMM 分词结果的个数
+tot_truth_cnt = 0                       # 统计 jieba 分词结果的个数
 
 new_words = []
 
@@ -59,31 +54,12 @@ for path in trainning_file_path:
 
         write_results(filename, {'FMM': results["FMM"]}, '/')
 
+import print_helper as helper
 
-print('FMM 分词结果：')
-print("jieba 分词总共的数目:", tot_truth_cnt)
-print("FMM   分词总共的数目:", tot_result_cnt['FMM'])
-print("FMM   分词正确的数目：", tot_hits['FMM'])
+# 打印统计信息
 
-P, R, F = calc_PRF(tot_hits['FMM'], tot_truth_cnt, tot_result_cnt['FMM'])
-
-print("准确率（P）：{:.5f} %".format(100 * P))
-print("回归率（R）：{:.5f} %".format(100 * R))
-print("F 值为：{}".format(F))
-
-
-print('BMM 分词结果：')
-print("jieba 分词总共的数目:", tot_truth_cnt)
-print("BMM   分词总共的数目:", tot_result_cnt['BMM'])
-print("BMM   分词正确的数目：", tot_hits['BMM'])
-
-P, R, F = calc_PRF(tot_hits['BMM'], tot_truth_cnt, tot_result_cnt['BMM'])
-
-print("准确率（P）：{:.5f} %".format(100 * P))
-print("回归率（R）：{:.5f} %".format(100 * R))
-print("F 值为：{}".format(F))
-
-# -----------------------------------------------------------------
+helper.print_stat('FMM', tot_truth_cnt, tot_result_cnt['FMM'], tot_hits['FMM'])
+helper.print_stat('BMM', tot_truth_cnt, tot_result_cnt['BMM'], tot_hits['BMM'])
 
 # 将新词添加入词典
 wordlist, cnt, maxlen = add_words(wordlist, cnt, maxlen, new_words)
