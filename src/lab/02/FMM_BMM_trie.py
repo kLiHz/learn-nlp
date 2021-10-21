@@ -14,6 +14,28 @@ def load_wordlist(filename):
     return wordlist, cnt, maxlen
 
 
+def add_words(wordlist, cnt, maxlen, new_words):
+    for w in new_words:
+        if w.startswith("-") or w.startswith("."):
+            # 排除可能的特殊符号串，如“----------”
+            continue
+        elif w.isdigit():
+            # 同理，排除掉特殊情况，使得字典更具有普遍性
+            continue
+        cnt += 1
+        maxlen = max(len(w), maxlen)
+        insert(wordlist, w)
+    return wordlist, cnt, maxlen
+
+
+def save_wordlist(filename, wordlist):
+    with open(filename, "w", encoding='utf-8') as out:
+        cnt = 0
+        for w in traverse(wordlist):
+            cnt += 1
+            out.write(str(cnt) + ' ' + w + '\n')
+
+
 def FMM(sentence, wordlist, maxlen):
     maxlen = max(1, maxlen)
     tokens = []

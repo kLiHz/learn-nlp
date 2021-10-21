@@ -25,4 +25,5 @@ for t in test_cases:
 
 print('All words:')
 
-trie.traverse(root)
+for w in trie.traverse(root):
+    print(w)
