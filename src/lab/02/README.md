@@ -80,9 +80,28 @@
 \\end{align}
 \\]
 
+
+实际评估一个系统时，应同时考虑 P 和 R，但同时要比较两个数值，很难做到一目了然。所以常采用综合两个值进行评价的办法，综合指标 F 值就是其中一种。计算公式如下：
+
+\\[
+\\text{F-score} = (1+\\beta^2)\\frac{P \times R}{\beta^2 \times P + R}
+\\]
+
+其中，\\(\\beta\\) 决定对 P 侧重还是对 R 侧重，通常设定为 1、2 或 \\(\\frac 1 2\\)。\\(\\beta\\) 取值为 1，即对二者一样重视，这时的 F-score 称为 \\(F_1\\) 值。
+
 ### 分词结果的评估
 
 机器学习中二分类的评估标准，无法直接应用于分词。
+
+在对汉语分词性能进行评估时，采用了常用的３个评测指标：准确率（P）、召回率（R）、综合指标 F 值（F）。准确率表示在切分的全部词语中，正确的所占的比值。召回率指在所有切分词语中（包括切分的和不应该忽略的），正确切分的词语所占的比值。准确率描述系统切分的词语中，正确的占多少。召回率表示应该得到的词语中，系统正确切分出了多少。计算公式如下：
+
+\\[
+P = \\frac{\\text{准确切分的词语数}}{\\text{切分出的所有词语数}}
+\\]
+
+\\[
+R = \\frac{\\text{准确切分的词语数}}{\\text{应该切分的词语数}}
+\\]
 
 若一字符串的分词结果为一系列单词，设每个单词按照其在文中的起止位置可记作区间 \\(\[i,j\]\\)（\\(0\\leq i \\leq j \\leq n\\)），那么标准答案对应的所有区间就可以构成一集合 \\(A\\)，作为正类，其他的区间则作为负类;同理，根据分词结果，可以得到集合 \\(B\\)。
 
@@ -92,9 +111,7 @@
 
 \\[A \\cap B = TP \\]
 
-则 P、R 的计算公式：
-
-\\(\\text{Precision} = \\frac{\vert A\cap B\vert}{\vert B \vert}\\)，
+则 P、R 的计算公式：\\(\\text{Precision} = \\frac{\vert A\cap B\vert}{\vert B \vert}\\)，
 \\(\\text{Recall} = \\frac{\vert A\cap B\vert}{\vert A \vert}\\)
 
 
@@ -124,13 +141,15 @@
 {{#include trie_test.py}}
 ```
 
-从文件中加载字典到 Trie 树，并进行最大正向匹配、最大逆向匹配：
+从文件中加载字典到 Trie 树，以及进行最大正向匹配（FMM）、最大逆向匹配（BMM）的功能：
 
-[FMM_BMM_trie.py](./FMM_BMM_trie.py) （使用 Python 内建的 set 类型：[FMM_BMM.py](./FMM_BMM.py)）
+[FMM_BMM_trie.py](./FMM_BMM_trie.py) 
 
 ```python
 {{#include FMM_BMM_trie.py}}
 ```
+
+> 另有使用 Python 内建的 set 类型的版本：[FMM_BMM.py](./FMM_BMM.py)。
 
 评估分词结果，以及计算 P、R、F 值：
 
@@ -156,6 +175,14 @@
 
 ```python
 {{#include demo.py}}
+```
+
+打印统计信息帮助函数：
+
+[print_helper.py](./print_helper.py)
+
+```python
+{{#include print_helper.py}}
 ```
 
 对文档进行分词尝试，对最大匹配算法进行评估，并记录新词：

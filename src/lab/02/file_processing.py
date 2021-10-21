@@ -2,9 +2,12 @@
 import os
 
 def cut_txt(file_name, cut_methods_list):
-    # 单个TXT文档处理，可以接收多个方法，
-    # cut_methods_list: [("name", method), ...]
-    # 以方法名作为键名，将其分词结果存储在字典中
+    """
+    单个TXT文档处理，可以接收多个方法，
+    :param file_name:   要处理的文件名
+    :param cut_methods_list: 类似如下的列表 [("name", method), ...]
+    :return: 存储分词结果的字典，以方法名作为键名
+    """
     results = dict()
     with open(file_name, "r", encoding='utf-8') as f:
         for line in f:
@@ -16,6 +19,9 @@ def cut_txt(file_name, cut_methods_list):
 
 
 def write_results(file_name, results, delimiter='/', output_dir_prefix=''):
+    """
+    将分词结果写出到文件
+    """
     for foo_name in results.keys():
         out_file_name = os.path.join(
             output_dir_prefix, 
@@ -26,7 +32,12 @@ def write_results(file_name, results, delimiter='/', output_dir_prefix=''):
 
 
 def process_path(path, cut_methods_list):
-    #传入某大学的文件路径， 对其各个标签项下的内容进行处理，文本分类后再重新写入（html.txt）
+    """
+    对目录下的所有文件进行处理
+    :param path: 目录名
+    :param cut_methods_list: 要采用的分词方法的列表
+    :return: 文件名及对应结果的生成器
+    """
     ignore = ['href', '简介', 'segmented']
     for root, subdirs, files in os.walk(path):
         for f in files:
