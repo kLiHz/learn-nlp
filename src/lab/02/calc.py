@@ -28,12 +28,11 @@ def calc_hits(truth, result):
             i += 1
             l2 += len(cut_result[j])
             j += 1
-    return hits, missmatches
+    return hits, len(truth), len(result), missmatches
 
 
-def calc_PRF(truth, result):
-    hits = calc_hits(truth, result)
-    P = hits / len(result)      # precision
-    R = hits / len(truth)       # recall
+def calc_PRF(hits, truth_len, result_len):
+    P = hits / result_len       # precision
+    R = hits / truth_len        # recall
     F = (2 * P * R) / (P + R)   # F1
     return P, R, F
