@@ -11,8 +11,8 @@ def calc_hits(truth, result):
     l1 = 0 # i 所指向词串，对应在原句中的长度
     l2 = 0 # j 所指向词串，对应在原句中的长度
     hits = 0
-    missmatches = []
-    while i < len(cut_truth) and j < len(cut_truth):
+    missmatches = set()
+    while i < len(cut_truth) and j < len(cut_result):
         if l1 < l2:
             l1 += len(cut_truth[i])
             i += 1
@@ -23,7 +23,7 @@ def calc_hits(truth, result):
             if cut_truth[i] == cut_result[j]:
                 hits += 1
             else:
-                missmatches.append(cut_result[j])
+                missmatches.add(cut_truth[i])
             l1 += len(cut_truth[i])
             i += 1
             l2 += len(cut_result[j])
@@ -36,4 +36,4 @@ def calc_PRF(truth, result):
     P = hits / len(result)      # precision
     R = hits / len(truth)       # recall
     F = (2 * P * R) / (P + R)   # F1
-    return P, R
+    return P, R, F
