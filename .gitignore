@@ -1,3 +1,5 @@
+.idea/
+.vscode/
 
 # mdBook build directory
 book/
