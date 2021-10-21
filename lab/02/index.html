@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>实验报告模板 - Learn NLP</title>
+        <title>实验 2：使用 FMM、BMM 算法分词 - Learn NLP</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -79,7 +79,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">首页</a></li><li class="chapter-item expanded "><a href="../../lab/index.html"><strong aria-hidden="true">1.</strong> 实验</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lab/01/index.html"><strong aria-hidden="true">1.1.</strong> 实验 1：互联网语料获取</a></li><li class="chapter-item expanded "><a href="../../lab/02/index.html"><strong aria-hidden="true">1.2.</strong> 实验 2：使用 FMM、BMM 算法分词</a></li><li class="chapter-item expanded "><a href="../../lab/misc/report-template.html" class="active"><strong aria-hidden="true">1.3.</strong> 实验报告模板</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">首页</a></li><li class="chapter-item expanded "><a href="../../lab/index.html"><strong aria-hidden="true">1.</strong> 实验</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lab/01/index.html"><strong aria-hidden="true">1.1.</strong> 实验 1：互联网语料获取</a></li><li class="chapter-item expanded "><a href="../../lab/02/index.html" class="active"><strong aria-hidden="true">1.2.</strong> 实验 2：使用 FMM、BMM 算法分词</a></li><li class="chapter-item expanded "><a href="../../lab/misc/report-template.html"><strong aria-hidden="true">1.3.</strong> 实验报告模板</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -117,7 +117,7 @@
                         <a href="https://github.com/tsagaanbar/learn-NLP" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/tsagaanbar/learn-NLP/edit/main/src/lab/misc/report-template.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/tsagaanbar/learn-NLP/edit/main/src/lab/02/README.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
                     </div>
@@ -144,8 +144,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="自然语言处理实验"><a class="header" href="#自然语言处理实验">自然语言处理实验</a></h1>
-<p>实验一</p>
+                        <h1 id="自然语言处理实验二"><a class="header" href="#自然语言处理实验二">自然语言处理：实验二</a></h1>
 <table>
     <style>
         th { text-justify: distribute; text-align-last: justify; text-align: justify; text-align: center; }
@@ -163,13 +162,217 @@
 <h2 id="摘要"><a class="header" href="#摘要">摘要</a></h2>
 <h2 id="目录"><a class="header" href="#目录">目录</a></h2>
 <h2 id="一实验内容"><a class="header" href="#一实验内容">一、实验内容</a></h2>
-<p>本次实验主要做什么？</p>
+<p>实验内容：对语料库的文本进行分词并存储。</p>
+<p>分别采用正向最大匹配算法、逆向最大匹配算法进行分词。</p>
+<p>以 <a href="https://github.com/fxsjy/jieba">jieba</a> 分词的分词结果作为标准语料，计算P、R、F值。</p>
 <h2 id="二实验原理"><a class="header" href="#二实验原理">二、实验原理</a></h2>
 <p>包含：存在的主要问题，用什么方法解决，原理是什么？</p>
+<p>基于词典的切分方法</p>
+<p>最大匹配法（Maximum Matching, MM）</p>
+<p>有词典切分，机械切分</p>
+<ul>
+<li>正向最大匹配算法（Forward MM, FMM）</li>
+<li>逆向最大匹配算法（Backward MM, BMM）</li>
+<li>双向最大匹配算法（Bi-directional MM）</li>
+</ul>
+<p>句子 \(S = c_1 c_2 \cdots c_n\)：句子由若干字符 \(c\) 组成。</p>
+<p>假设词 \(w_i = c_1c_2 \cdots c_m\)，其中 \(m\) 为词典中最长词的字数。</p>
 <h2 id="三整体框架"><a class="header" href="#三整体框架">三、整体框架</a></h2>
 <p>包含整体框图，各主要模块的功能。</p>
 <p>图表都需要 <strong>带编号</strong></p>
 <h2 id="四主要程序模块"><a class="header" href="#四主要程序模块">四、主要程序模块</a></h2>
+<p>考虑到可能会涉及大量词语的存储与检索，尝试使用将词库载入并存储于自己实现的 Trie 字典树结构中。</p>
+<p>为了简便起见，使用 Python 中的字典结构模拟节点对象。</p>
+<p><a href="./my_trie.py">my_trie.py</a></p>
+<pre><code class="language-python">def insert(node, s):
+    current = node
+    for c in s:
+        if c not in current['children'].keys():
+            current['children'][c] = { 'c': c, 'children':dict(), 'cnt': 0 }
+        current = current['children'][c]
+    current['cnt'] += 1
+
+
+def find(node, s):
+    for c in s:
+        if c in node['children'].keys():
+            node = node['children'][c]
+        else:
+            return False
+    return node['cnt'] &gt; 0
+
+
+def traverse(node, s=''):
+    for key in node['children'].keys():
+        s += node['children'][key]['c']
+        traverse(node['children'][key], s)
+        s = s[:-1]
+    if node['cnt'] &gt; 0:
+        print(s)
+
+</code></pre>
+<p>使用示例：</p>
+<p><a href="./trie_test.py">trie_test.py</a></p>
+<pre><code class="language-python">import my_trie as trie
+
+root = { 'c': '', 'children':dict(), 'cnt': 0 }
+
+trie.insert(root, 'apple')
+trie.insert(root, 'loop')
+trie.insert(root, 'app')
+
+test_cases = [
+    ('a', False),
+    ('ap', False),
+    ('app', True),
+    ('appl', False),
+    ('apple', True),
+    ('l', False),
+    ('lo', False),
+    ('loo', False),
+    ('loop', True),
+    ('loopa', False),
+    ('loopan', False)
+]
+
+for t in test_cases:
+    print(t[0], '\tExpected: ', t[1], '\tGot: ', trie.find(root, t[0]))
+
+print('All words:')
+
+trie.traverse(root)
+</code></pre>
+<p>从文件中加载字典到 Trie 树，并进行最大正向匹配、最大逆向匹配：</p>
+<p><a href="./FMM_BMM_trie.py">FMM_BMM_trie.py</a> （使用 Python 内建的 set 类型：<a href="./FMM_BMM.py">FMM_BMM.py</a>）</p>
+<pre><code class="language-python">from my_trie import *
+
+def load_wordlist(filename):
+    wordlist = { 'c': '', 'children':dict(), 'cnt': 0 }
+    maxlen = 0
+    cnt = 0
+    with open(filename) as f:
+        if f.readline().strip() == '@Lexicon':
+            for line in f:
+                word = line.split()[1]
+                maxlen = max(maxlen, len(word))
+                insert(wordlist, word)
+                cnt += 1
+    return wordlist, cnt, maxlen
+
+
+def FMM(sentence, wordlist, maxlen):
+    maxlen = max(1, maxlen)
+    tokens = []
+    i = 0
+    while i &lt; len(sentence):
+        n = len(sentence) - i # 未被切分的字串长度
+        m = min(maxlen, n)
+        w = sentence[i:i+m]
+        while len(w) &gt; 1:
+            if find(wordlist, w):
+                break
+            else:
+                w = w[0:-1]
+        tokens.append(w)
+        i += len(w)
+    return tokens
+
+
+def BMM(sentence, wordlist, maxlen):
+    maxlen = max(1, maxlen)
+    tokens = []
+    i = len(sentence)
+    while i &gt;= 1:
+        n = i # 未被切分的字串长度
+        m = min(maxlen, n)
+        w = sentence[i-m:i]
+        while len(w) &gt; 1:
+            if find(wordlist, w):
+                break
+            else:
+                w = w[1:]
+        tokens.append(w)
+        i -= len(w)
+    tokens.reverse()
+    return tokens
+</code></pre>
+<p>计算 P、R、F 值：</p>
+<p><a href="./calc.py">calc.py</a></p>
+<pre><code class="language-python">special_characters = set(list(&quot;()[]+-*/&lt;&gt;|\\;:\&quot;\'\,.?!@#$%^&amp;~`\{\}（）【】《》，。？“”‘’；：——「」『』〔〕&quot;))
+
+#包括部分特殊字符，在进行分词比对时将特殊字符排除，以免对结果产生一定的影响
+
+def calc_hits(truth, result):
+    # 传入分词得到的结果（列表），以及“正确分词”结果
+    cut_truth = [item for item in truth if item not in special_characters]
+    cut_result = [item for item in result if item not in special_characters]
+    i = 0  # 指向 truth 中的 token
+    j = 0  # 指向 result 中的 token
+    l1 = 0 # i 所指向词串，对应在原句中的长度
+    l2 = 0 # j 所指向词串，对应在原句中的长度
+    hits = 0
+    missmatches = []
+    while i &lt; len(cut_truth) and j &lt; len(cut_truth):
+        if l1 &lt; l2:
+            l1 += len(cut_truth[i])
+            i += 1
+        elif l1 &gt; l2:
+            l2 += len(cut_result[j])
+            j += 1
+        else: 
+            if cut_truth[i] == cut_result[j]:
+                hits += 1
+            else:
+                missmatches.append(cut_result[j])
+            l1 += len(cut_truth[i])
+            i += 1
+            l2 += len(cut_result[j])
+            j += 1
+    return hits, missmatches
+
+
+def calc_PRF(truth, result):
+    hits = calc_hits(truth, result)
+    P = hits / len(result)      # precision
+    R = hits / len(truth)       # recall
+    F = (2 * P * R) / (P + R)   # F1
+    return P, R
+</code></pre>
+<p>交互式分词程序：</p>
+<p><a href="./demo.py">demo.py</a></p>
+<pre><code class="language-python">from FMM_BMM_trie import *
+from calc import *
+
+import jieba
+
+wordlist, cnt, maxlen = load_wordlist('wordlist.dic')
+
+while True:
+    s = input().strip()
+    if s == '#':
+        break
+    ground_truth = jieba.lcut(s)  # 'ground truth'
+    fmm = FMM(s, wordlist, maxlen)
+    bmm = BMM(s, wordlist, maxlen)
+
+    print('jieba:     ', &quot;/&quot;.join(ground_truth))
+
+    print('-' * 20)
+
+    print('FMM:       ', &quot;/&quot;.join(fmm))
+    hits, _ = calc_hits(ground_truth, fmm)
+    print('Hits:      ', hits)
+    print('Precision: ', hits / len(fmm))
+    print('Recall:    ', hits / len(ground_truth))
+
+    print('-' * 20)
+
+    print('BMM:       ', &quot;/&quot;.join(bmm))
+    hits, _ = calc_hits(ground_truth, bmm)
+    print('Hits:      ', hits)
+    print('Precision: ', hits / len(bmm))
+    print('Recall:    ', hits / len(ground_truth))
+</code></pre>
 <p>详细介绍各个主要模块的功能及实现流程。</p>
 <h2 id="五实验结果"><a class="header" href="#五实验结果">五、实验结果</a></h2>
 <p>详细分析实验结果，除了包含定量评价，还要有定性评价。
@@ -183,8 +386,11 @@
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../lab/02/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../lab/01/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../../lab/misc/report-template.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -192,8 +398,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../lab/02/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../lab/01/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../../lab/misc/report-template.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 
