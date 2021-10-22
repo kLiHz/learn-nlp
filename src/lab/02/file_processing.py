@@ -10,6 +10,9 @@ def cut_txt(file_name, cut_methods_list):
     :return: 存储分词结果的字典，以方法名作为键名
     """
     results = dict()
+    for pair in cut_methods_list:
+        results[pair[0]] = []
+    
     elapsed_time = 0
     with open(file_name, "r", encoding='utf-8') as f:
         for line in f:
@@ -17,7 +20,7 @@ def cut_txt(file_name, cut_methods_list):
                 foo_name = pair[0]
                 foo = pair[1]
                 start = time.time()
-                results[foo_name] = foo(line.strip())
+                results[foo_name] += foo(line.strip())
                 end = time.time()
                 elapsed_time += (end - start)
 
