@@ -1,7 +1,7 @@
 from my_trie import *
 
 def load_wordlist(filename):
-    wordlist = { 'c': '', 'children':dict(), 'cnt': 0 }
+    wordlist = dict()
     maxlen = 0
     cnt = 0
     with open(filename) as f:

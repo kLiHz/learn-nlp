@@ -581,7 +581,9 @@ def getSecondTitle(soup, path):
 <li><a href="https://ithelp.ithome.com.tw/articles/10225429">https://ithelp.ithome.com.tw/articles/10225429</a></li>
 <li><a href="https://marcovaldong.github.io/2016/08/18/Python%E7%88%AC%E8%99%AB%E7%88%AC%E5%8F%96%E7%9F%A5%E4%B9%8E%E5%B0%8F%E7%BB%93/">https://marcovaldong.github.io/2016/08/18/Python爬虫爬取知乎小结/</a></li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="自然语言处理实验二"><a class="header" href="#自然语言处理实验二">自然语言处理：实验二</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="自然语言处理"><a class="header" href="#自然语言处理">自然语言处理</a></h1>
+<p style="text-align: center;">实验二</p>
+<img src="lab/02/./assets/logo.svg" alt="School Logo" style="max-width: 30%;">
 <!-- {{#include ../misc/authors.html}} -->
 <table>
     <style>
@@ -596,9 +598,49 @@ def getSecondTitle(soup, path):
         <tr><th>学号</th><td>19000000</td></tr>
     </tbody>
 </table>
-<p>日期： 2021 年 10 月 21 日</p>
-<h2 id="摘要-1"><a class="header" href="#摘要-1">摘要</a></h2>
+<p style="text-align: center;">日期： 2021 年 10 月 21 日</p>
+<div style="page-break-after: always;"></div>
 <h2 id="目录-1"><a class="header" href="#目录-1">目录</a></h2>
+<ol style="list-style-type: none;">
+    <li><a href="lab/02/index.html#自然语言处理实验二">自然语言处理：实验二</a>
+        <ol style="list-style-type: none;">
+            <li><a href="lab/02/index.html#一实验内容">一、实验内容</a></li>
+            <li><a href="lab/02/index.html#二实验原理">二、实验原理</a>
+                <ol style="list-style-type: none;">
+                    <li><a href="lab/02/index.html#基于词典的切分方法">基于词典的切分方法</a></li>
+                    <li><a href="lab/02/index.html#jieba-分词库">jieba 分词库</a></li>
+                    <li><a href="lab/02/index.html#扩充词典">扩充词典</a></li>
+                    <li><a href="lab/02/index.html#准确率精确率召回率及-F-值">准确率、精确率、召回率及 F 值</a></li>
+                    <li><a href="lab/02/index.html#分词结果的评估">分词结果的评估</a></li>
+                </ol>
+            </li>
+            <li><a href="lab/02/index.html#三整体框架">三、整体框架</a></li>
+            <li><a href="lab/02/index.html#四主要程序模块">四、主要程序模块</a>
+                <ol style="list-style-type: none;">
+                    <li><a href="lab/02/index.html#fmmbmm">FMM、BMM</a></li>
+                    <li><a href="lab/02/index.html#评估分词结果">评估分词结果</a></li>
+                    <li><a href="lab/02/index.html#多文件处理">多文件处理</a></li>
+                    <li><a href="lab/02/index.html#交互式分词程序">交互式分词程序</a></li>
+                    <li><a href="lab/02/index.html#训练及测试">训练及测试</a></li>
+                    <li><a href="lab/02/index.html#trie-模块">Trie 模块</a></li>
+                </ol>
+            </li>
+            <li><a href="lab/02/index.html#五实验结果">五、实验结果</a>
+                <ol style="list-style-type: none;">
+                    <li><a href="lab/02/index.html#基本实验结果">基本实验结果</a></li>
+                    <li><a href="lab/02/index.html#词典容量的影响">词典容量的影响</a></li>
+                </ol>
+            </li>
+            <li><a href="lab/02/index.html#六总结">六、总结</a>
+                <ol style="list-style-type: none;">
+                    <li><a href="lab/02/index.html#关于如何计算正确匹配数">关于如何计算正确匹配数</a></li>
+                    <li><a href="lab/02/index.html#参考资料">参考资料</a></li>
+                </ol>
+            </li>
+        </ol>
+    </li>
+</ol>
+<div style="page-break-after: always;"></div>
 <h2 id="一实验内容-1"><a class="header" href="#一实验内容-1">一、实验内容</a></h2>
 <p>实验内容：</p>
 <ul>
@@ -622,7 +664,7 @@ def getSecondTitle(soup, path):
 <li>n 最短路径方法。将所有的切分结果组成有向无环图，切词结果作为节点，词和词之间的边赋予权重，找到权重和最小的路径即为最终结果。比如可以通过词频作为权重，找到一条总词频最大的路径即可认为是最佳路径。</li>
 <li>n 元语法模型。同样采用 n 最短路径，只不过路径构成时会考虑词的上下文关系。一元表示考虑词的前后一个词，二元则表示考虑词的前后两个词。然后根据语料库的统计结果，找到概率最大的路径。</li>
 </ol>
-<p>此次实验默认使用的是实验指导书中提供的词典。</p>
+<p>此次实验默认使用的是实验指导书中提供的词典，分别采用正向最大匹配算法、逆向最大匹配算法进行分词。</p>
 <h3 id="jieba-分词库"><a class="header" href="#jieba-分词库">jieba 分词库</a></h3>
 <p><a href="https://github.com/fxsjy/jieba">jieba</a> 支持三种分词模式:</p>
 <ol>
@@ -632,9 +674,9 @@ def getSecondTitle(soup, path):
 </ol>
 <h3 id="扩充词典"><a class="header" href="#扩充词典">扩充词典</a></h3>
 <p>将过程中遇到的“新词”添加进词典，可以提高文本识别的准确率。</p>
-<h3 id="准确率召回率及-f-值"><a class="header" href="#准确率召回率及-f-值">准确率、召回率及 F 值</a></h3>
+<h3 id="准确率精确率召回率及-f-值"><a class="header" href="#准确率精确率召回率及-f-值">准确率、精确率、召回率及 F 值</a></h3>
 <p>机器学习中的分类评估包含有以下这么几个概念。</p>
-<p>准确率（Accuracy），即正确分类的数量占总的数量的比值，是一个用来衡量分类器预测结果与真实结果差异的一个指标，越接近于 1 说明分类结果越准确。</p>
+<p><strong>准确率</strong>（Accuracy），即正确分类的数量占总的数量的比值，是一个用来衡量分类器预测结果与真实结果差异的一个指标，越接近于 1 说明分类结果越准确。</p>
 <p>二分类的结果有以下几种可能性：</p>
 <ul>
 <li>True Positive（TP）：表示将正样本预测为正样本，即预测正确；</li>
@@ -642,7 +684,8 @@ def getSecondTitle(soup, path):
 <li>False Negative（FN）：表示将正样本预测为负样本，即预测错误；</li>
 <li>True Negative（TN）：表示将负样本预测为负样本，即预测正确；</li>
 </ul>
-<p>精确率（Precision）计算的是预测对的正样本在整个预测为正样本中的比重，而召回率（Recall）计算的是预测对的正样本在整个真实正样本中的比重。因此，一般来说，召回率越高，意味着模型找寻正样本的能力越强。但值得注意的是，在实际任务中，并不明确哪一类是正样本或哪一类是负样本，所以对于每个类别，都可以计算其各项指标。</p>
+<p><strong>精确率</strong>（Precision）计算的是预测对的正样本在整个预测为正样本中的比重，而<strong>召回率</strong>（Recall）计算的是预测对的正样本在整个真实正样本中的比重。因此，一般来说，召回率越高，意味着模型找寻正样本的能力越强。</p>
+<p>准确率、精确率、召回率的计算公式如下：</p>
 <p>\[
 \begin{align}
 \text{Accuracy} = &amp; \frac{TP+TN}{TP+FP+FN+TN} \\
@@ -650,6 +693,7 @@ def getSecondTitle(soup, path):
 \text{Recall} = &amp; \frac{TP}{TP+FN} \\
 \end{align}
 \]</p>
+<p>值得注意的是，在实际任务中，并不明确哪一类是正样本或哪一类是负样本，所以对于每个类别，都可以计算其各项指标。</p>
 <p>实际评估一个系统时，应同时考虑 P 和 R，但同时要比较两个数值，很难做到一目了然。所以常采用综合两个值进行评价的办法，综合指标 F 值就是其中一种。计算公式如下：</p>
 <p>\[
 \text{F-score} = (1+\beta^2)\frac{P \times R}{\beta^2 \times P + R}
@@ -668,89 +712,32 @@ R = \frac{\text{准确切分的词语数}}{\text{应该切分的词语数}}
 <p>\[TP \cup FN = A \]</p>
 <p>\[TP \cup FP = B \]</p>
 <p>\[A \cap B = TP \]</p>
-<p>则 P、R 的计算公式：\(\text{Precision} = \frac{\vert A\cap B\vert}{\vert B \vert}\)，
-\(\text{Recall} = \frac{\vert A\cap B\vert}{\vert A \vert}\)</p>
+<p>则对于分词结果，P、R 的计算公式：</p>
+<p>\[\text{Precision} = \frac{\vert A\cap B\vert}{\vert B \vert}\]</p>
+<p>\[\text{Recall} = \frac{\vert A\cap B\vert}{\vert A \vert}\]</p>
 <h2 id="三整体框架-1"><a class="header" href="#三整体框架-1">三、整体框架</a></h2>
 <p>主要分为功能模块和使用调用。详见主要程序模块。</p>
+<ul>
+<li>FMM、BMM 分词：<a href="lab/02/./FMM_BMM.py">FMM_BMM.py</a>、<a href="lab/02/./FMM_BMM_trie.py">FMM_BMM_trie.py</a></li>
+<li>多文件处理：<a href="lab/02/./file_processing.py">file_processing.py</a></li>
+</ul>
 <h2 id="四主要程序模块-1"><a class="header" href="#四主要程序模块-1">四、主要程序模块</a></h2>
-<h3 id="功能模块设计"><a class="header" href="#功能模块设计">功能模块设计</a></h3>
-<p>考虑到可能会涉及大量词语的存储与检索，尝试使用将词库载入并存储于自己实现的 Trie 字典树结构中。</p>
-<p>为了简便起见，使用 Python 中的字典结构模拟节点对象。</p>
-<p><a href="lab/02/./my_trie.py">my_trie.py</a></p>
-<pre><code class="language-python">def insert(node, s):
-    current = node
-    for c in s:
-        if c not in current['children'].keys():
-            current['children'][c] = { 'c': c, 'children':dict(), 'cnt': 0 }
-        current = current['children'][c]
-    current['cnt'] += 1
-
-
-def find(node, s):
-    for c in s:
-        if c in node['children'].keys():
-            node = node['children'][c]
-        else:
-            return False
-    return node['cnt'] &gt; 0
-
-
-def traverse(node, s=''):
-    for key in node['children'].keys():
-        s += node['children'][key]['c']
-        yield from traverse(node['children'][key], s)
-        s = s[:-1]
-    if node['cnt'] &gt; 0:
-        yield s
-
-</code></pre>
-<p>使用示例：</p>
-<p><a href="lab/02/./trie_test.py">trie_test.py</a></p>
-<pre><code class="language-python">import my_trie as trie
-
-root = { 'c': '', 'children':dict(), 'cnt': 0 }
-
-trie.insert(root, 'apple')
-trie.insert(root, 'loop')
-trie.insert(root, 'app')
-
-test_cases = [
-    ('a', False),
-    ('ap', False),
-    ('app', True),
-    ('appl', False),
-    ('apple', True),
-    ('l', False),
-    ('lo', False),
-    ('loo', False),
-    ('loop', True),
-    ('loopa', False),
-    ('loopan', False)
-]
-
-for t in test_cases:
-    print(t[0], '\tExpected: ', t[1], '\tGot: ', trie.find(root, t[0]))
-
-print('All words:')
-
-for w in trie.traverse(root):
-    print(w)
-</code></pre>
-<p>从文件中加载字典到 Trie 树，以及进行最大正向匹配（FMM）、最大逆向匹配（BMM）的功能：</p>
-<p><a href="lab/02/./FMM_BMM_trie.py">FMM_BMM_trie.py</a> </p>
-<pre><code class="language-python">from my_trie import *
-
-def load_wordlist(filename):
-    wordlist = { 'c': '', 'children':dict(), 'cnt': 0 }
+<h3 id="fmmbmm"><a class="header" href="#fmmbmm">FMM、BMM</a></h3>
+<p>从文件中加载字典到 Python 内建的 <code>set</code> 类型，以及进行最大正向匹配（FMM）、最大逆向匹配（BMM）的功能：</p>
+<p><a href="lab/02/./FMM_BMM.py">FMM_BMM.py</a> </p>
+<pre><code class="language-python">def load_wordlist(filename):
+    wordlist = set()
     maxlen = 0
     cnt = 0
     with open(filename) as f:
+        # 判断文件首行是否为指定的 'magic code'
         if f.readline().strip() == '@Lexicon':
             for line in f:
                 word = line.split()[1]
                 maxlen = max(maxlen, len(word))
-                insert(wordlist, word)
+                wordlist.add(word)
                 cnt += 1
+    # maxlen 为字典中最长词的长度
     return wordlist, cnt, maxlen
 
 
@@ -767,7 +754,7 @@ def add_words(wordlist, cnt, maxlen, new_words):
             continue
         cnt += 1
         maxlen = max(len(w), maxlen)
-        insert(wordlist, w)
+        wordlist.add(w)
     return wordlist, cnt, maxlen
 
 
@@ -775,7 +762,7 @@ def save_wordlist(filename, wordlist):
     with open(filename, &quot;w&quot;, encoding='utf-8') as out:
         out.write('@Lexicon\n')
         cnt = 0
-        for w in traverse(wordlist):
+        for w in wordlist:
             cnt += 1
             out.write(str(cnt) + ' ' + w + '\n')
 
@@ -789,7 +776,7 @@ def FMM(sentence, wordlist, maxlen):
         m = min(maxlen, n)
         w = sentence[i:i+m]
         while len(w) &gt; 1:
-            if find(wordlist, w):
+            if w in wordlist:
                 break
             else:
                 w = w[0:-1]
@@ -807,7 +794,7 @@ def BMM(sentence, wordlist, maxlen):
         m = min(maxlen, n)
         w = sentence[i-m:i]
         while len(w) &gt; 1:
-            if find(wordlist, w):
+            if w in wordlist:
                 break
             else:
                 w = w[1:]
@@ -815,10 +802,9 @@ def BMM(sentence, wordlist, maxlen):
         i -= len(w)
     tokens.reverse()
     return tokens
+
 </code></pre>
-<blockquote>
-<p>另有使用 Python 内建的 set 类型的版本：<a href="lab/02/./FMM_BMM.py">FMM_BMM.py</a>。</p>
-</blockquote>
+<h3 id="评估分词结果"><a class="header" href="#评估分词结果">评估分词结果</a></h3>
 <p>评估分词结果，以及计算 P、R、F 值：</p>
 <p><a href="lab/02/./calc.py">calc.py</a></p>
 <pre><code class="language-python">special_characters = set(list(
@@ -864,7 +850,7 @@ def calc_PRF(hits, truth_len, result_len):
     F = (2 * P * R) / (P + R)   # F_1
     return P, R, F
 </code></pre>
-<p>多文件处理：</p>
+<h3 id="多文件处理"><a class="header" href="#多文件处理">多文件处理</a></h3>
 <p><a href="lab/02/./file_processing.py">file_processing.py</a></p>
 <pre><code class="language-python"># -*-coding:UTF-8 -*-
 import os
@@ -935,8 +921,8 @@ def process_path(path, cut_methods_list):
             yield file_name, results, t 
 
 </code></pre>
-<h3 id="应用程序"><a class="header" href="#应用程序">应用程序</a></h3>
-<p>交互式分词程序：</p>
+<p>在 <code>简介.txt</code> 和 <code>href.txt</code> 中含有 URL 链接，对其进行处理会在一定程度上影响到分词的结果，亦会产生较多无意义的“新词”，故不对其进行处理。</p>
+<h3 id="交互式分词程序"><a class="header" href="#交互式分词程序">交互式分词程序</a></h3>
 <p><a href="lab/02/./demo.py">demo.py</a></p>
 <pre><code class="language-python">from FMM_BMM_trie import *
 from calc import *
@@ -975,6 +961,7 @@ while True:
     print('Recall:    ', R)
     print('F:         ', F)
 </code></pre>
+<h3 id="训练及测试"><a class="header" href="#训练及测试">训练及测试</a></h3>
 <p>打印统计信息帮助函数：</p>
 <p><a href="lab/02/./print_helper.py">print_helper.py</a></p>
 <pre><code class="language-python">from numpy.core.numeric import NaN
@@ -983,7 +970,7 @@ from calc import calc_PRF
 def print_stat(foo_name, total_truth_cnt, total_result_cnt, total_hits):
 
     print('{} 分词结果：'.format(foo_name))
-    print(&quot;{:&lt;8} 分词总共的数目：{}&quot;.format(foo_name, total_truth_cnt))
+    print(&quot;{:&lt;8} 分词总共的数目：{}&quot;.format(&quot;jieba&quot;, total_truth_cnt))
     print(&quot;{:&lt;8} 分词总共的数目：{}&quot;.format(foo_name, total_result_cnt))
     print(&quot;{:&lt;8} 分词正确的数目：{}&quot;.format(foo_name, total_hits))
 
@@ -996,7 +983,8 @@ def print_stat(foo_name, total_truth_cnt, total_result_cnt, total_hits):
     print(&quot;回归率（R）：{:.5f} %&quot;.format(100 * R))
     print(&quot;F 值为：{}&quot;.format(F))
 </code></pre>
-<p>对文档进行分词尝试，对最大匹配算法进行评估，并记录新词：</p>
+<p>对文档进行分词尝试，使用 jieba 分词以及 FMM、BMM 两种最大匹配算法进行分词，并评估 FMM、BMM 分词的结果。</p>
+<p>同时，根据与 jieba 分词结果的差异得到“新词”并添加进词典。最后，将得到的新词典写出到 <code>new_wordlist.dic</code> 文件：</p>
 <p><a href="lab/02/./train.py">train.py</a></p>
 <pre><code class="language-python">import jieba
 from FMM_BMM_trie import *   # 根据路径不同修改
@@ -1067,7 +1055,7 @@ wordlist, cnt, maxlen = add_words(wordlist, cnt, maxlen, new_words)
 
 save_wordlist('new_wordlist.dic', wordlist)
 </code></pre>
-<p>使用训练后得到的词典进行结果评估：</p>
+<p>使用训练后得到的词典，进行 FMM、BMM 分词，并对结果评估（亦以 jieba 分词的结果为标准答案）：</p>
 <p><a href="lab/02/./test.py">test.py</a></p>
 <pre><code class="language-python">import jieba
 from FMM_BMM_trie import *   # 根据路径不同修改
@@ -1127,20 +1115,114 @@ import print_helper as helper
 helper.print_stat('FMM', tot_truth_cnt, tot_result_cnt['FMM'], tot_hits['FMM'])
 helper.print_stat('BMM', tot_truth_cnt, tot_result_cnt['BMM'], tot_hits['BMM'])
 </code></pre>
+<h3 id="trie-模块"><a class="header" href="#trie-模块">Trie 模块</a></h3>
+<p>考虑到可能会涉及大量词语的存储与检索，尝试使用将词库载入并存储于自己实现的 Trie 字典树结构中。</p>
+<blockquote>
+<p>实际测试时，使用该 Trie 实现的效率不及使用 Python 内建的集合类型。</p>
+</blockquote>
+<p>为了简便起见，使用 Python 中的字典结构模拟节点对象。</p>
+<p><a href="lab/02/./my_trie.py">my_trie.py</a></p>
+<pre><code class="language-python">def insert(node, s):
+    current = node
+    for c in s:
+        if c not in current:
+            current[c] = dict()
+        current = current[c]
+    current['end'] = True
+
+
+def find(node, s):
+    for c in s:
+        if c not in node:
+            return False
+        node = node[c]
+    return 'end' in node
+
+
+def traverse(node, s=''):
+    for key in node.keys():
+        if key == 'end':
+            continue
+        s += key
+        yield from traverse(node[key], s)
+        s = s[:-1]
+    if 'end' in node:
+        yield s
+
+</code></pre>
+<p>使用示例：<a href="lab/02/./trie_test.py">trie_test.py</a></p>
+<p>使用 trie 进行词典检索的 FMM、BMM：<a href="lab/02/./FMM_BMM_trie.py">FMM_BMM_trie.py</a>。</p>
 <h2 id="五实验结果-1"><a class="header" href="#五实验结果-1">五、实验结果</a></h2>
+<h3 id="基本实验结果"><a class="header" href="#基本实验结果">基本实验结果</a></h3>
+<p>实验采用的语料来自于知乎问答平台上针对“大学”的回答。初步实验材料的大小如下：</p>
 <figure>
-<p><img src="lab/02/./assets/FMM.png" alt="FMM Result Beforen Train" /></p>
-<figcaption>图 1：FMM 分词结果评估</figcaption>
+<img src="lab/02/./assets/train-material.png" 
+    alt="用于训练的材料：2789 个文件，2.63 MB" 
+    title="用于训练的材料大小"
+    style="max-width: 50%;">
+<figcaption>图 1：用于训练的材料（2789 个文件，2.63 MB）</figcaption>
 </figure>
 <figure>
-<p><img src="lab/02/./assets/BMM.png" alt="BMM Result Beforen Train" /></p>
-<figcaption>图 2：BMM 分词结果评估</figcaption>
+<img src="lab/02/./assets/test-material.png" 
+    alt="用于测试的材料：1747 个文件，1.61 MBB" 
+    title="用于测试的材料大小"
+    style="max-width: 50%;">
+<figcaption>图 2：用于测试的材料（1747 个文件，1.61 MB）</figcaption>
 </figure>
+<p>首先使用默认字典（53143 词），对训练材料进行分词，并对结果评估，最后产生新的字典。（使用自己编写的 Trie 作为存储词典的结构）</p>
+<p>代码：<a href="lab/02/./train.py">train.py</a></p>
 <figure>
-<p><img src="lab/02/./assets/FMM-after.png" alt="FMM Result After Train" /></p>
-<figcaption>图 3：添加词典后分词结果（FMM）</figcaption>
+<p><img src="lab/02/./assets/trie-before-train.png" alt="使用默认词典的情况下，FMM、BMM 法分词的结果" /></p>
+<figcaption>图 3：使用默认词典的情况下，FMM、BMM 法分词的结果</figcaption>
 </figure>
+<pre><code>总耗时：8.89 s
+
+FMM 分词结果：
+jieba    分词总共的数目：70222
+FMM      分词总共的数目：82647
+FMM      分词正确的数目：47265
+准确率（P）：57.18901 %
+回归率（R）：67.30797 %
+F 值为：0.6183725935277917
+
+BMM 分词结果：
+jieba    分词总共的数目：70222
+BMM      分词总共的数目：82643
+BMM      分词正确的数目：47414
+准确率（P）：57.37207 %
+回归率（R）：67.52015 %
+F 值为：0.6203382069145978
+</code></pre>
+<p>得到新的词典拥有 57692 条词。接着，使用学习“新词”后的词典，对其余的资料进行分词，并评估分词结果。（使用自己编写的 Trie 作为存储词典的结构）</p>
+<p>代码：<a href="lab/02/./test.py">test.py</a></p>
+<figure>
+<p><img src="lab/02/./assets/trie-after-train.png" alt="使用学习“新词”后的词典，FMM、BMM 法分词的结果" /></p>
+<figcaption>图 4：使用学习“新词”后的词典，FMM、BMM 法分词的结果</figcaption>
+</figure>
+<pre><code>总耗时：21.36 s
+FMM 分词结果：
+jieba    分词总共的数目：51258
+FMM      分词总共的数目：55242
+FMM      分词正确的数目：38370
+准确率（P）：69.45802 %
+回归率（R）：74.85661 %
+F 值为：0.7205633802816901
+BMM 分词结果：
+jieba    分词总共的数目：51258
+BMM      分词总共的数目：55252
+BMM      分词正确的数目：38563
+准确率（P）：69.79476 %
+回归率（R）：75.23313 %
+F 值为：0.7241198009576565
+</code></pre>
+<p>可以看到，虽然词典扩增规模不明显，但耗时显著增加。</p>
+<h3 id="词典容量的影响"><a class="header" href="#词典容量的影响">词典容量的影响</a></h3>
+<p>很显然，对于词典匹配法，当词典的容量越大，效果越好，进行分词所需的时间越多。</p>
+<p>经过多次测试发现，在使用初始词典进行分词的情况下，正确率在 60% 左右。随着词典的中单词数量扩充至 17 ~ 18 万左右时，正确率可以达到 84% ~ 86%。</p>
+<p>随着词典数量的进一步提升，分词的正确率的提升较小，但时间方面的开销却越来越大。</p>
 <h2 id="六总结-1"><a class="header" href="#六总结-1">六、总结</a></h2>
+<p>在这次实验中，练习了使用 FMM、BMM 以及 jieba 分词库对文本进行分词处理，在整个的实验过程中，通过查询相关资料等途径解决许多问题，实践能力得到了较大的提升。</p>
+<p>仍存在正确分词个数统计不准确的问题，有待完善。</p>
 <h3 id="关于如何计算正确匹配数"><a class="header" href="#关于如何计算正确匹配数">关于如何计算正确匹配数</a></h3>
 <p>简单的方法是，</p>
 <pre><code class="language-python">hits += len([i for i in result if i in truth]) 
@@ -1155,6 +1237,7 @@ miss += [i for i in result if i not in truth]
 <li><a href="https://github.com/fxsjy/jieba">fxsjy/jieba - GitHub</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/100552669">NLP 中文分词的评估指标 - 知乎</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Natural_language_processing">Natural language processing - Wikipedia</a></li>
+<li><a href="https://stackoverflow.com/questions/11015320/how-to-create-a-trie-in-python/11015381">https://stackoverflow.com/questions/11015320/how-to-create-a-trie-in-python/11015381</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="自然语言处理实验-1"><a class="header" href="#自然语言处理实验-1">自然语言处理实验</a></h1>
 <p>实验一</p>
@@ -1172,7 +1255,7 @@ miss += [i for i in result if i not in truth]
     </tbody>
 </table>
 <p>日期： 2021 年 9 月 29 日</p>
-<h2 id="摘要-2"><a class="header" href="#摘要-2">摘要</a></h2>
+<h2 id="摘要-1"><a class="header" href="#摘要-1">摘要</a></h2>
 <h2 id="目录-2"><a class="header" href="#目录-2">目录</a></h2>
 <h2 id="一实验内容-2"><a class="header" href="#一实验内容-2">一、实验内容</a></h2>
 <p>本次实验主要做什么？</p>
