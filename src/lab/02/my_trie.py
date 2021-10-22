@@ -19,7 +19,7 @@ def find(node, s):
 def traverse(node, s=''):
     for key in node['children'].keys():
         s += node['children'][key]['c']
-        traverse(node['children'][key], s)
+        yield from traverse(node['children'][key], s)
         s = s[:-1]
     if node['cnt'] > 0:
         yield s
