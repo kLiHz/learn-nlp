@@ -4,7 +4,7 @@ from calc import calc_PRF
 def print_stat(foo_name, total_truth_cnt, total_result_cnt, total_hits):
 
     print('{} 分词结果：'.format(foo_name))
-    print("{:<8} 分词总共的数目：{}".format(foo_name, total_truth_cnt))
+    print("{:<8} 分词总共的数目：{}".format("jieba", total_truth_cnt))
     print("{:<8} 分词总共的数目：{}".format(foo_name, total_result_cnt))
     print("{:<8} 分词正确的数目：{}".format(foo_name, total_hits))
 

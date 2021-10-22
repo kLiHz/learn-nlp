@@ -1,15 +1,22 @@
-# 自然语言处理：实验二
+# 自然语言处理
+
+<p style="text-align: center;">实验二</p>
+
+<img src="./assets/logo.svg" alt="School Logo" style="max-width: 30%;">
 
 <!-- {{#include ../misc/authors.html}} -->
 
 {{#include ../misc/author-info.html}}
 
-日期： 2021 年 10 月 21 日
+<p style="text-align: center;">日期： 2021 年 10 月 21 日</p>
 
-## 摘要
-
+<div style="page-break-after: always;"></div>
 
 ## 目录
+
+{{#include toc.html}}
+
+<div style="page-break-after: always;"></div>
 
 ## 一、实验内容
 
@@ -41,7 +48,7 @@
 1. n 最短路径方法。将所有的切分结果组成有向无环图，切词结果作为节点，词和词之间的边赋予权重，找到权重和最小的路径即为最终结果。比如可以通过词频作为权重，找到一条总词频最大的路径即可认为是最佳路径。
 2. n 元语法模型。同样采用 n 最短路径，只不过路径构成时会考虑词的上下文关系。一元表示考虑词的前后一个词，二元则表示考虑词的前后两个词。然后根据语料库的统计结果，找到概率最大的路径。
 
-此次实验默认使用的是实验指导书中提供的词典。
+此次实验默认使用的是实验指导书中提供的词典，分别采用正向最大匹配算法、逆向最大匹配算法进行分词。
 
 ### jieba 分词库
 
@@ -57,11 +64,11 @@
 
 将过程中遇到的“新词”添加进词典，可以提高文本识别的准确率。
 
-### 准确率、召回率及 F 值
+### 准确率、精确率、召回率及 F 值
 
 机器学习中的分类评估包含有以下这么几个概念。
 
-准确率（Accuracy），即正确分类的数量占总的数量的比值，是一个用来衡量分类器预测结果与真实结果差异的一个指标，越接近于 1 说明分类结果越准确。
+**准确率**（Accuracy），即正确分类的数量占总的数量的比值，是一个用来衡量分类器预测结果与真实结果差异的一个指标，越接近于 1 说明分类结果越准确。
 
 二分类的结果有以下几种可能性：
 
@@ -70,7 +77,9 @@
 - False Negative（FN）：表示将正样本预测为负样本，即预测错误；
 - True Negative（TN）：表示将负样本预测为负样本，即预测正确；
 
-精确率（Precision）计算的是预测对的正样本在整个预测为正样本中的比重，而召回率（Recall）计算的是预测对的正样本在整个真实正样本中的比重。因此，一般来说，召回率越高，意味着模型找寻正样本的能力越强。但值得注意的是，在实际任务中，并不明确哪一类是正样本或哪一类是负样本，所以对于每个类别，都可以计算其各项指标。
+**精确率**（Precision）计算的是预测对的正样本在整个预测为正样本中的比重，而**召回率**（Recall）计算的是预测对的正样本在整个真实正样本中的比重。因此，一般来说，召回率越高，意味着模型找寻正样本的能力越强。
+
+准确率、精确率、召回率的计算公式如下：
 
 \\[
 \\begin{align}
@@ -80,6 +89,7 @@
 \\end{align}
 \\]
 
+值得注意的是，在实际任务中，并不明确哪一类是正样本或哪一类是负样本，所以对于每个类别，都可以计算其各项指标。
 
 实际评估一个系统时，应同时考虑 P 和 R，但同时要比较两个数值，很难做到一目了然。所以常采用综合两个值进行评价的办法，综合指标 F 值就是其中一种。计算公式如下：
 
@@ -111,45 +121,33 @@ R = \\frac{\\text{准确切分的词语数}}{\\text{应该切分的词语数}}
 
 \\[A \\cap B = TP \\]
 
-则 P、R 的计算公式：\\(\\text{Precision} = \\frac{\vert A\cap B\vert}{\vert B \vert}\\)，
-\\(\\text{Recall} = \\frac{\vert A\cap B\vert}{\vert A \vert}\\)
+则对于分词结果，P、R 的计算公式：
+
+\\[\\text{Precision} = \\frac{\vert A\cap B\vert}{\vert B \vert}\\]
+
+\\[\\text{Recall} = \\frac{\vert A\cap B\vert}{\vert A \vert}\\]
 
 
 ## 三、整体框架
 
 主要分为功能模块和使用调用。详见主要程序模块。
 
+- FMM、BMM 分词：[FMM_BMM.py](./FMM_BMM.py)、[FMM_BMM_trie.py](./FMM_BMM_trie.py)
+- 多文件处理：[file_processing.py](./file_processing.py)
+
 ## 四、主要程序模块
 
-### 功能模块设计
+### FMM、BMM
 
-考虑到可能会涉及大量词语的存储与检索，尝试使用将词库载入并存储于自己实现的 Trie 字典树结构中。
+从文件中加载字典到 Python 内建的 `set` 类型，以及进行最大正向匹配（FMM）、最大逆向匹配（BMM）的功能：
 
-为了简便起见，使用 Python 中的字典结构模拟节点对象。
-
-[my_trie.py](./my_trie.py)
+[FMM_BMM.py](./FMM_BMM.py) 
 
 ```python
-{{#include my_trie.py}}
+{{#include FMM_BMM.py}}
 ```
 
-使用示例：
-
-[trie_test.py](./trie_test.py)
-
-```python
-{{#include trie_test.py}}
-```
-
-从文件中加载字典到 Trie 树，以及进行最大正向匹配（FMM）、最大逆向匹配（BMM）的功能：
-
-[FMM_BMM_trie.py](./FMM_BMM_trie.py) 
-
-```python
-{{#include FMM_BMM_trie.py}}
-```
-
-> 另有使用 Python 内建的 set 类型的版本：[FMM_BMM.py](./FMM_BMM.py)。
+### 评估分词结果
 
 评估分词结果，以及计算 P、R、F 值：
 
@@ -159,7 +157,7 @@ R = \\frac{\\text{准确切分的词语数}}{\\text{应该切分的词语数}}
 {{#include calc.py}}
 ```
 
-多文件处理：
+### 多文件处理
 
 [file_processing.py](./file_processing.py)
 
@@ -167,15 +165,17 @@ R = \\frac{\\text{准确切分的词语数}}{\\text{应该切分的词语数}}
 {{#include file_processing.py}}
 ```
 
-### 应用程序
+在 `简介.txt` 和 `href.txt` 中含有 URL 链接，对其进行处理会在一定程度上影响到分词的结果，亦会产生较多无意义的“新词”，故不对其进行处理。
 
-交互式分词程序：
+### 交互式分词程序
 
 [demo.py](./demo.py)
 
 ```python
 {{#include demo.py}}
 ```
+
+### 训练及测试
 
 打印统计信息帮助函数：
 
@@ -185,7 +185,9 @@ R = \\frac{\\text{准确切分的词语数}}{\\text{应该切分的词语数}}
 {{#include print_helper.py}}
 ```
 
-对文档进行分词尝试，对最大匹配算法进行评估，并记录新词：
+对文档进行分词尝试，使用 jieba 分词以及 FMM、BMM 两种最大匹配算法进行分词，并评估 FMM、BMM 分词的结果。
+
+同时，根据与 jieba 分词结果的差异得到“新词”并添加进词典。最后，将得到的新词典写出到 `new_wordlist.dic` 文件：
 
 [train.py](./train.py)
 
@@ -193,7 +195,7 @@ R = \\frac{\\text{准确切分的词语数}}{\\text{应该切分的词语数}}
 {{#include train.py}}
 ```
 
-使用训练后得到的词典进行结果评估：
+使用训练后得到的词典，进行 FMM、BMM 分词，并对结果评估（亦以 jieba 分词的结果为标准答案）：
 
 [test.py](./test.py)
 
@@ -201,33 +203,122 @@ R = \\frac{\\text{准确切分的词语数}}{\\text{应该切分的词语数}}
 {{#include test.py}}
 ```
 
+### Trie 模块
+
+考虑到可能会涉及大量词语的存储与检索，尝试使用将词库载入并存储于自己实现的 Trie 字典树结构中。
+
+> 实际测试时，使用该 Trie 实现的效率不及使用 Python 内建的集合类型。
+
+为了简便起见，使用 Python 中的字典结构模拟节点对象。
+
+[my_trie.py](./my_trie.py)
+
+```python
+{{#include my_trie.py}}
+```
+
+使用示例：[trie_test.py](./trie_test.py)
+
+使用 trie 进行词典检索的 FMM、BMM：[FMM_BMM_trie.py](./FMM_BMM_trie.py)。
+
+
 ## 五、实验结果
 
+### 基本实验结果
+
+实验采用的语料来自于知乎问答平台上针对“大学”的回答。初步实验材料的大小如下：
+
+<figure>
+<img src="./assets/train-material.png" 
+    alt="用于训练的材料：2789 个文件，2.63 MB" 
+    title="用于训练的材料大小"
+    style="max-width: 50%;">
+<figcaption>图 1：用于训练的材料（2789 个文件，2.63 MB）</figcaption>
+</figure>
+
+<figure>
+<img src="./assets/test-material.png" 
+    alt="用于测试的材料：1747 个文件，1.61 MBB" 
+    title="用于测试的材料大小"
+    style="max-width: 50%;">
+<figcaption>图 2：用于测试的材料（1747 个文件，1.61 MB）</figcaption>
+</figure>
+
+首先使用默认字典（53143 词），对训练材料进行分词，并对结果评估，最后产生新的字典。（使用自己编写的 Trie 作为存储词典的结构）
+
+代码：[train.py](./train.py)
 
 <figure>
 
-![FMM Result Beforen Train](./assets/FMM.png)
+![使用默认词典的情况下，FMM、BMM 法分词的结果](./assets/trie-before-train.png)
 
-<figcaption>图 1：FMM 分词结果评估</figcaption>
+<figcaption>图 3：使用默认词典的情况下，FMM、BMM 法分词的结果</figcaption>
 </figure>
 
+```
+总耗时：8.89 s
+
+FMM 分词结果：
+jieba    分词总共的数目：70222
+FMM      分词总共的数目：82647
+FMM      分词正确的数目：47265
+准确率（P）：57.18901 %
+回归率（R）：67.30797 %
+F 值为：0.6183725935277917
+
+BMM 分词结果：
+jieba    分词总共的数目：70222
+BMM      分词总共的数目：82643
+BMM      分词正确的数目：47414
+准确率（P）：57.37207 %
+回归率（R）：67.52015 %
+F 值为：0.6203382069145978
+```
+
+得到新的词典拥有 57692 条词。接着，使用学习“新词”后的词典，对其余的资料进行分词，并评估分词结果。（使用自己编写的 Trie 作为存储词典的结构）
+
+代码：[test.py](./test.py)
 
 <figure>
 
-![BMM Result Beforen Train](./assets/BMM.png)
+![使用学习“新词”后的词典，FMM、BMM 法分词的结果](./assets/trie-after-train.png)
 
-<figcaption>图 2：BMM 分词结果评估</figcaption>
+<figcaption>图 4：使用学习“新词”后的词典，FMM、BMM 法分词的结果</figcaption>
 </figure>
 
+```
+总耗时：21.36 s
+FMM 分词结果：
+jieba    分词总共的数目：51258
+FMM      分词总共的数目：55242
+FMM      分词正确的数目：38370
+准确率（P）：69.45802 %
+回归率（R）：74.85661 %
+F 值为：0.7205633802816901
+BMM 分词结果：
+jieba    分词总共的数目：51258
+BMM      分词总共的数目：55252
+BMM      分词正确的数目：38563
+准确率（P）：69.79476 %
+回归率（R）：75.23313 %
+F 值为：0.7241198009576565
+```
 
-<figure>
+可以看到，虽然词典扩增规模不明显，但耗时显著增加。
 
-![FMM Result After Train](./assets/FMM-after.png)
+### 词典容量的影响
 
-<figcaption>图 3：添加词典后分词结果（FMM）</figcaption>
-</figure>
+很显然，对于词典匹配法，当词典的容量越大，效果越好，进行分词所需的时间越多。
+
+经过多次测试发现，在使用初始词典进行分词的情况下，正确率在 60% 左右。随着词典的中单词数量扩充至 17 ~ 18 万左右时，正确率可以达到 84% ~ 86%。
+
+随着词典数量的进一步提升，分词的正确率的提升较小，但时间方面的开销却越来越大。
 
 ## 六、总结
+
+在这次实验中，练习了使用 FMM、BMM 以及 jieba 分词库对文本进行分词处理，在整个的实验过程中，通过查询相关资料等途径解决许多问题，实践能力得到了较大的提升。
+
+仍存在正确分词个数统计不准确的问题，有待完善。
 
 ### 关于如何计算正确匹配数
 
