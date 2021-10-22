@@ -249,3 +249,4 @@ miss += [i for i in result if i not in truth]
 - [fxsjy/jieba - GitHub](https://github.com/fxsjy/jieba)
 - [NLP 中文分词的评估指标 - 知乎](https://zhuanlan.zhihu.com/p/100552669)
 - [Natural language processing - Wikipedia](https://en.wikipedia.org/wiki/Natural_language_processing)
+- <https://stackoverflow.com/questions/11015320/how-to-create-a-trie-in-python/11015381>

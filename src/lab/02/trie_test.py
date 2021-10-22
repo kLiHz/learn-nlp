@@ -1,6 +1,6 @@
 import my_trie as trie
 
-root = { 'c': '', 'children':dict(), 'cnt': 0 }
+root = dict()
 
 trie.insert(root, 'apple')
 trie.insert(root, 'loop')

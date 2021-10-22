@@ -1,26 +1,27 @@
 def insert(node, s):
     current = node
     for c in s:
-        if c not in current['children'].keys():
-            current['children'][c] = { 'c': c, 'children':dict(), 'cnt': 0 }
-        current = current['children'][c]
-    current['cnt'] += 1
+        if c not in current:
+            current[c] = dict()
+        current = current[c]
+    current['end'] = True
 
 
 def find(node, s):
     for c in s:
-        if c in node['children'].keys():
-            node = node['children'][c]
-        else:
+        if c not in node:
             return False
-    return node['cnt'] > 0
+        node = node[c]
+    return 'end' in node
 
 
 def traverse(node, s=''):
-    for key in node['children'].keys():
-        s += node['children'][key]['c']
-        yield from traverse(node['children'][key], s)
+    for key in node.keys():
+        if key == 'end':
+            continue
+        s += key
+        yield from traverse(node[key], s)
         s = s[:-1]
-    if node['cnt'] > 0:
+    if 'end' in node:
         yield s
 
