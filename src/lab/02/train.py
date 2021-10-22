@@ -3,15 +3,7 @@ from FMM_BMM_trie import *   # 根据路径不同修改
 from calc import *
 from file_processing import * 
 
-trainning_file_path = [
-    "成都理工大学", 
-    "四川大学", 
-    "四川师范大学", 
-    "西南财经大学", 
-    "西南交通大学",
-    "西南石油大学", 
-    "中央民族大学"
-]
+trainning_file_path = ["训练语料"]
 
 wordlist, cnt, maxlen = load_wordlist('wordlist.dic')
 
@@ -33,6 +25,9 @@ new_words = []
 for path in trainning_file_path:
     # 对某一目录下结果进行处理
     for filename, results in process_path(path, methods):
+        
+        if len(results) == 0: continue
+        
         truth = results['jieba']
         fmm = results['FMM']
         bmm = results['BMM']

@@ -38,7 +38,7 @@ def process_path(path, cut_methods_list):
     :param cut_methods_list: 要采用的分词方法的列表
     :return: 文件名及对应结果的生成器
     """
-    ignore = ['href', '简介', 'segmented']
+    ignore = ['href', '简介', 'segmented', '#']
     for root, subdirs, files in os.walk(path):
         for f in files:
             file_name = os.path.join(root, f)
@@ -52,7 +52,7 @@ def process_path(path, cut_methods_list):
             if should_pass: continue
 
             # 当前正在处理的文件
-            print(file_name)
+            print(' - Processing:', file_name)
             
             # 获得各方法的分词结果：results
             yield file_name, cut_txt(file_name, cut_methods_list)

@@ -16,10 +16,13 @@ def load_wordlist(filename):
 
 def add_words(wordlist, cnt, maxlen, new_words):
     for w in new_words:
+        w = w.strip()
+        if len(w) == 0:
+            continue
         if w.startswith("-") or w.startswith("."):
             # 排除可能的特殊符号串，如“----------”
             continue
-        elif w.isdigit():
+        if w.isdigit():
             # 同理，排除掉特殊情况，使得字典更具有普遍性
             continue
         cnt += 1
@@ -30,6 +33,7 @@ def add_words(wordlist, cnt, maxlen, new_words):
 
 def save_wordlist(filename, wordlist):
     with open(filename, "w", encoding='utf-8') as out:
+        out.write('@Lexicon\n')
         cnt = 0
         for w in traverse(wordlist):
             cnt += 1
