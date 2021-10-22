@@ -756,10 +756,13 @@ def load_wordlist(filename):
 
 def add_words(wordlist, cnt, maxlen, new_words):
     for w in new_words:
+        w = w.strip()
+        if len(w) == 0:
+            continue
         if w.startswith(&quot;-&quot;) or w.startswith(&quot;.&quot;):
             # 排除可能的特殊符号串，如“----------”
             continue
-        elif w.isdigit():
+        if w.isdigit():
             # 同理，排除掉特殊情况，使得字典更具有普遍性
             continue
         cnt += 1
@@ -770,6 +773,7 @@ def add_words(wordlist, cnt, maxlen, new_words):
 
 def save_wordlist(filename, wordlist):
     with open(filename, &quot;w&quot;, encoding='utf-8') as out:
+        out.write('@Lexicon\n')
         cnt = 0
         for w in traverse(wordlist):
             cnt += 1
@@ -864,6 +868,7 @@ def calc_PRF(hits, truth_len, result_len):
 <p><a href="lab/02/./file_processing.py">file_processing.py</a></p>
 <pre><code class="language-python"># -*-coding:UTF-8 -*-
 import os
+import time
 
 def cut_txt(file_name, cut_methods_list):
     &quot;&quot;&quot;
@@ -873,13 +878,18 @@ def cut_txt(file_name, cut_methods_list):
     :return: 存储分词结果的字典，以方法名作为键名
     &quot;&quot;&quot;
     results = dict()
+    elapsed_time = 0
     with open(file_name, &quot;r&quot;, encoding='utf-8') as f:
         for line in f:
             for pair in cut_methods_list:
                 foo_name = pair[0]
                 foo = pair[1]
-                results[foo_name] = foo(line)
-    return results
+                start = time.time()
+                results[foo_name] = foo(line.strip())
+                end = time.time()
+                elapsed_time += (end - start)
+
+    return results, elapsed_time
 
 
 def write_results(file_name, results, delimiter='/', output_dir_prefix=''):
@@ -902,7 +912,7 @@ def process_path(path, cut_methods_list):
     :param cut_methods_list: 要采用的分词方法的列表
     :return: 文件名及对应结果的生成器
     &quot;&quot;&quot;
-    ignore = ['href', '简介', 'segmented']
+    ignore = ['href', '简介', 'segmented', '#']
     for root, subdirs, files in os.walk(path):
         for f in files:
             file_name = os.path.join(root, f)
@@ -916,10 +926,13 @@ def process_path(path, cut_methods_list):
             if should_pass: continue
 
             # 当前正在处理的文件
-            print(file_name)
+            print(' - Processing:', file_name)
             
             # 获得各方法的分词结果：results
-            yield file_name, cut_txt(file_name, cut_methods_list)
+            
+            results, t = cut_txt(file_name, cut_methods_list)
+
+            yield file_name, results, t 
 
 </code></pre>
 <h3 id="应用程序"><a class="header" href="#应用程序">应用程序</a></h3>
@@ -964,7 +977,8 @@ while True:
 </code></pre>
 <p>打印统计信息帮助函数：</p>
 <p><a href="lab/02/./print_helper.py">print_helper.py</a></p>
-<pre><code class="language-python">from calc import calc_PRF
+<pre><code class="language-python">from numpy.core.numeric import NaN
+from calc import calc_PRF
 
 def print_stat(foo_name, total_truth_cnt, total_result_cnt, total_hits):
 
@@ -973,7 +987,10 @@ def print_stat(foo_name, total_truth_cnt, total_result_cnt, total_hits):
     print(&quot;{:&lt;8} 分词总共的数目：{}&quot;.format(foo_name, total_result_cnt))
     print(&quot;{:&lt;8} 分词正确的数目：{}&quot;.format(foo_name, total_hits))
 
-    P, R, F = calc_PRF(total_hits, total_truth_cnt, total_result_cnt)
+    P, R, F = NaN, NaN, NaN
+
+    if total_result_cnt != 0 and total_truth_cnt != 0:
+        P, R, F = calc_PRF(total_hits, total_truth_cnt, total_result_cnt)
 
     print(&quot;准确率（P）：{:.5f} %&quot;.format(100 * P))
     print(&quot;回归率（R）：{:.5f} %&quot;.format(100 * R))
@@ -986,15 +1003,7 @@ from FMM_BMM_trie import *   # 根据路径不同修改
 from calc import *
 from file_processing import * 
 
-trainning_file_path = [
-    &quot;成都理工大学&quot;, 
-    &quot;四川大学&quot;, 
-    &quot;四川师范大学&quot;, 
-    &quot;西南财经大学&quot;, 
-    &quot;西南交通大学&quot;,
-    &quot;西南石油大学&quot;, 
-    &quot;中央民族大学&quot;
-]
+trainning_file_path = [&quot;训练语料&quot;]
 
 wordlist, cnt, maxlen = load_wordlist('wordlist.dic')
 
@@ -1013,9 +1022,14 @@ tot_truth_cnt = 0                       # 统计 jieba 分词结果的个数
 
 new_words = []
 
+tot_elapsed_time = 0
+
 for path in trainning_file_path:
     # 对某一目录下结果进行处理
-    for filename, results in process_path(path, methods):
+    for filename, results, elapsed_time in process_path(path, methods):
+        
+        if len(results) == 0: continue
+        
         truth = results['jieba']
         fmm = results['FMM']
         bmm = results['BMM']
@@ -1031,11 +1045,15 @@ for path in trainning_file_path:
         new_words += missmatches
         
         tot_truth_cnt += len_truth
+
+        tot_elapsed_time += elapsed_time
         
         # 对同一个文档进行的 FMM 和 BMM 处理，虽然存在差异
         # 但大部分分词结果相同，故只将 FMM 分词结果存储
 
-        write_results(filename, {'FMM': results[&quot;FMM&quot;]}, '/')
+        # write_results(filename, {'FMM': results[&quot;FMM&quot;]}, '/')
+
+print('总耗时：{} s'.format(tot_elapsed_time))
 
 import print_helper as helper
 
@@ -1058,8 +1076,6 @@ from file_processing import *
 
 wordlist, cnt, maxlen = load_wordlist('new_wordlist.Dic')
 
-print(&quot;------------------训练后---------------------&quot;)
-
 FMM_cut = lambda line : FMM(line, wordlist, maxlen)
 BMM_cut = lambda line : BMM(line, wordlist, maxlen)
 
@@ -1069,15 +1085,20 @@ methods = [
     ('BMM', BMM_cut)
 ]
 
-test_file_path = [&quot;重庆大学&quot;, &quot;西华大学&quot;]
+test_file_path = [&quot;测试语料&quot;]
 
 tot_hits = {'FMM': 0, 'BMM': 0}
 tot_result_cnt = {'FMM': 0, 'BMM': 0}
 tot_truth_cnt = 0
 
+tot_elapsed_time = 0
+
 for path in test_file_path:
     # 对某一目录下结果进行处理
-    for filename, results in process_path(path, methods):
+    for filename, results, elapsed_time in process_path(path, methods):
+        
+        if len(results) == 0: continue
+
         truth = results['jieba']
         fmm = results['FMM']
         bmm = results['BMM']
@@ -1091,6 +1112,13 @@ for path in test_file_path:
         tot_result_cnt['BMM'] += len_result
         
         tot_truth_cnt += len_truth
+
+        tot_elapsed_time += elapsed_time
+
+
+print(&quot;------------------训练后---------------------&quot;)
+
+print('总耗时：{} s'.format(tot_elapsed_time))
 
 import print_helper as helper
 

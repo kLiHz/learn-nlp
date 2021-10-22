@@ -3,15 +3,7 @@ from FMM_BMM_trie import *   # 根据路径不同修改
 from calc import *
 from file_processing import * 
 
-trainning_file_path = [
-    "成都理工大学", 
-    "四川大学", 
-    "四川师范大学", 
-    "西南财经大学", 
-    "西南交通大学",
-    "西南石油大学", 
-    "中央民族大学"
-]
+trainning_file_path = ["训练语料"]
 
 wordlist, cnt, maxlen = load_wordlist('wordlist.dic')
 
@@ -30,9 +22,14 @@ tot_truth_cnt = 0                       # 统计 jieba 分词结果的个数
 
 new_words = []
 
+tot_elapsed_time = 0
+
 for path in trainning_file_path:
     # 对某一目录下结果进行处理
-    for filename, results in process_path(path, methods):
+    for filename, results, elapsed_time in process_path(path, methods):
+        
+        if len(results) == 0: continue
+        
         truth = results['jieba']
         fmm = results['FMM']
         bmm = results['BMM']
@@ -48,11 +45,15 @@ for path in trainning_file_path:
         new_words += missmatches
         
         tot_truth_cnt += len_truth
+
+        tot_elapsed_time += elapsed_time
         
         # 对同一个文档进行的 FMM 和 BMM 处理，虽然存在差异
         # 但大部分分词结果相同，故只将 FMM 分词结果存储
 
-        write_results(filename, {'FMM': results["FMM"]}, '/')
+        # write_results(filename, {'FMM': results["FMM"]}, '/')
+
+print('总耗时：{} s'.format(tot_elapsed_time))
 
 import print_helper as helper
 
