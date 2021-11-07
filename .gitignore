@@ -3,3 +3,6 @@
 
 # mdBook build directory
 book/
+
+# Python Cache
+__pycache__

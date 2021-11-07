@@ -2,9 +2,7 @@
 
 <p style="text-align: center;">实验二</p>
 
-<img src="./assets/logo.svg" alt="School Logo" style="max-width: 30%;">
-
-<!-- {{#include ../misc/authors.html}} -->
+<img src="../misc/logo.svg" alt="School Logo" style="max-width: 30%;">
 
 {{#include ../misc/author-info.html}}
 
@@ -29,9 +27,9 @@
 
 ### 基于词典的切分方法
 
-句子 \\(S = c_1 c_2 \cdots c_n\\)：句子由若干字符 \\(c\\) 组成。
+句子 \\(S = c\_1 c\_2 \\cdots c\_n\\)：句子由若干字符 \\(c\\) 组成。
 
-假设词 \\(w_i = c_1 c_2 \cdots c_m\\)，其中 \\(m\\) 为词典中最长词的字数。
+假设词 \\(w\_i = c\_1 c\_2 \\cdots c\_m\\)，其中 \\(m\\) 为词典中最长词的字数。
 
 当前的分词算法主要分为两类——基于词典的规则匹配方法和基于统计的机器学习方法。
 
@@ -345,3 +343,5 @@ miss += [i for i in result if i not in truth]
 - [NLP 中文分词的评估指标 - 知乎](https://zhuanlan.zhihu.com/p/100552669)
 - [Natural language processing - Wikipedia](https://en.wikipedia.org/wiki/Natural_language_processing)
 - <https://stackoverflow.com/questions/11015320/how-to-create-a-trie-in-python/11015381>
+- [《自然语言处理入门》笔记 - 2. 词典分词 - CSDN](https://blog.csdn.net/weixin_41510260/article/details/104181827)
+- [NLP-LOVE/Introduction-NLP: HanLP 作者的新书《自然语言处理入门》详细笔记](https://github.com/NLP-LOVE/Introduction-NLP)
