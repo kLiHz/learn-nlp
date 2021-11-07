@@ -864,6 +864,9 @@ def cut_txt(file_name, cut_methods_list):
     :return: 存储分词结果的字典，以方法名作为键名
     &quot;&quot;&quot;
     results = dict()
+    for pair in cut_methods_list:
+        results[pair[0]] = []
+    
     elapsed_time = 0
     with open(file_name, &quot;r&quot;, encoding='utf-8') as f:
         for line in f:
@@ -871,7 +874,7 @@ def cut_txt(file_name, cut_methods_list):
                 foo_name = pair[0]
                 foo = pair[1]
                 start = time.time()
-                results[foo_name] = foo(line.strip())
+                results[foo_name] += foo(line.strip())
                 end = time.time()
                 elapsed_time += (end - start)
 
@@ -987,7 +990,7 @@ def print_stat(foo_name, total_truth_cnt, total_result_cnt, total_hits):
 <p>同时，根据与 jieba 分词结果的差异得到“新词”并添加进词典。最后，将得到的新词典写出到 <code>new_wordlist.dic</code> 文件：</p>
 <p><a href="lab/02/./train.py">train.py</a></p>
 <pre><code class="language-python">import jieba
-from FMM_BMM_trie import *   # 根据路径不同修改
+from FMM_BMM import *   # 根据路径不同修改
 from calc import *
 from file_processing import * 
 
@@ -1058,7 +1061,7 @@ save_wordlist('new_wordlist.dic', wordlist)
 <p>使用训练后得到的词典，进行 FMM、BMM 分词，并对结果评估（亦以 jieba 分词的结果为标准答案）：</p>
 <p><a href="lab/02/./test.py">test.py</a></p>
 <pre><code class="language-python">import jieba
-from FMM_BMM_trie import *   # 根据路径不同修改
+from FMM_BMM import *   # 根据路径不同修改
 from calc import *
 from file_processing import * 
 
@@ -1152,6 +1155,21 @@ def traverse(node, s=''):
 </code></pre>
 <p>使用示例：<a href="lab/02/./trie_test.py">trie_test.py</a></p>
 <p>使用 trie 进行词典检索的 FMM、BMM：<a href="lab/02/./FMM_BMM_trie.py">FMM_BMM_trie.py</a>。</p>
+<p>实际效率情况对比：</p>
+<ul>
+<li>使用自己编写的 Trie 模块：
+<ul>
+<li><a href="lab/02/assets/trie-before-train.png">trie-before-train.png</a></li>
+<li><a href="lab/02/assets/trie-after-train.png">trie-after-train.png</a></li>
+</ul>
+</li>
+<li>使用 Python 内建的 <code>set</code> 类型：
+<ul>
+<li><a href="lab/02/assets/python-set-before-train.png">python-set-before-train.png</a></li>
+<li><a href="lab/02/assets/python-set-after-train.png">python-set-after-train.png</a></li>
+</ul>
+</li>
+</ul>
 <h2 id="五实验结果-1"><a class="header" href="#五实验结果-1">五、实验结果</a></h2>
 <h3 id="基本实验结果"><a class="header" href="#基本实验结果">基本实验结果</a></h3>
 <p>实验采用的语料来自于知乎问答平台上针对“大学”的回答。初步实验材料的大小如下：</p>
@@ -1169,51 +1187,47 @@ def traverse(node, s=''):
     style="max-width: 50%;">
 <figcaption>图 2：用于测试的材料（1747 个文件，1.61 MB）</figcaption>
 </figure>
-<p>首先使用默认字典（53143 词），对训练材料进行分词，并对结果评估，最后产生新的字典。（使用自己编写的 Trie 作为存储词典的结构）</p>
+<p>首先使用默认字典（53143 词），对训练材料进行分词，并对结果评估，最后产生新的字典。（使用 Python 内建的 set 作为存储词典的结构）</p>
 <p>代码：<a href="lab/02/./train.py">train.py</a></p>
 <figure>
-<p><img src="lab/02/./assets/trie-before-train.png" alt="使用默认词典的情况下，FMM、BMM 法分词的结果" /></p>
+<p><img src="lab/02/./assets/python-set-before-train.png" alt="使用默认词典的情况下，FMM、BMM 法分词的结果" /></p>
 <figcaption>图 3：使用默认词典的情况下，FMM、BMM 法分词的结果</figcaption>
 </figure>
-<pre><code>总耗时：8.89 s
-
-FMM 分词结果：
-jieba    分词总共的数目：70222
-FMM      分词总共的数目：82647
-FMM      分词正确的数目：47265
-准确率（P）：57.18901 %
-回归率（R）：67.30797 %
-F 值为：0.6183725935277917
-
+<pre><code>FMM 分词结果：
+jieba    分词总共的数目：572064
+FMM      分词总共的数目：678648
+FMM      分词正确的数目：270026
+准确率（P）：39.78882 %
+回归率（R）：47.20206 %
+F 值为：0.43179564919821667
 BMM 分词结果：
-jieba    分词总共的数目：70222
-BMM      分词总共的数目：82643
-BMM      分词正确的数目：47414
-准确率（P）：57.37207 %
-回归率（R）：67.52015 %
-F 值为：0.6203382069145978
+jieba    分词总共的数目：572064
+BMM      分词总共的数目：678620
+BMM      分词正确的数目：270798
+准确率（P）：39.90422 %
+回归率（R）：47.33701 %
+F 值为：0.43303984059922407
 </code></pre>
-<p>得到新的词典拥有 57692 条词。接着，使用学习“新词”后的词典，对其余的资料进行分词，并评估分词结果。（使用自己编写的 Trie 作为存储词典的结构）</p>
+<p>得到新的词典拥有 74550 条词。接着，使用学习“新词”后的词典，对其余的资料进行分词，并评估分词结果。</p>
 <p>代码：<a href="lab/02/./test.py">test.py</a></p>
 <figure>
-<p><img src="lab/02/./assets/trie-after-train.png" alt="使用学习“新词”后的词典，FMM、BMM 法分词的结果" /></p>
+<p><img src="lab/02/./assets/python-set-after-train.png" alt="使用学习“新词”后的词典，FMM、BMM 法分词的结果" /></p>
 <figcaption>图 4：使用学习“新词”后的词典，FMM、BMM 法分词的结果</figcaption>
 </figure>
-<pre><code>总耗时：21.36 s
-FMM 分词结果：
-jieba    分词总共的数目：51258
-FMM      分词总共的数目：55242
-FMM      分词正确的数目：38370
-准确率（P）：69.45802 %
-回归率（R）：74.85661 %
-F 值为：0.7205633802816901
+<pre><code>FMM 分词结果：
+jieba    分词总共的数目：349662
+FMM      分词总共的数目：368303
+FMM      分词正确的数目：233505
+准确率（P）：63.40024 %
+回归率（R）：66.78020 %
+F 值为：0.6504634627036137
 BMM 分词结果：
-jieba    分词总共的数目：51258
-BMM      分词总共的数目：55252
-BMM      分词正确的数目：38563
-准确率（P）：69.79476 %
-回归率（R）：75.23313 %
-F 值为：0.7241198009576565
+jieba    分词总共的数目：349662
+BMM      分词总共的数目：368354
+BMM      分词正确的数目：233925
+准确率（P）：63.50549 %
+回归率（R）：66.90032 %
+F 值为：0.6515871512612532
 </code></pre>
 <p>可以看到，虽然词典扩增规模不明显，但耗时显著增加。</p>
 <h3 id="词典容量的影响"><a class="header" href="#词典容量的影响">词典容量的影响</a></h3>

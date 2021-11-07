@@ -1,5 +1,5 @@
 import jieba
-from FMM_BMM_trie import *   # 根据路径不同修改
+from FMM_BMM import *   # 根据路径不同修改
 from calc import *
 from file_processing import * 
 
