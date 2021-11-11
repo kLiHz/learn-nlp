@@ -79,7 +79,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">首页</a></li><li class="chapter-item expanded "><a href="../../lab/index.html"><strong aria-hidden="true">1.</strong> 实验</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lab/01/index.html"><strong aria-hidden="true">1.1.</strong> 实验 1：互联网语料获取</a></li><li class="chapter-item expanded "><a href="../../lab/02/index.html" class="active"><strong aria-hidden="true">1.2.</strong> 实验 2：使用 FMM、BMM 算法分词</a></li><li class="chapter-item expanded "><a href="../../lab/misc/report-template.html"><strong aria-hidden="true">1.3.</strong> 实验报告模板</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">首页</a></li><li class="chapter-item expanded "><a href="../../lab/index.html"><strong aria-hidden="true">1.</strong> 实验</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lab/01/index.html"><strong aria-hidden="true">1.1.</strong> 实验 1：互联网语料获取</a></li><li class="chapter-item expanded "><a href="../../lab/02/index.html" class="active"><strong aria-hidden="true">1.2.</strong> 实验 2：使用 FMM、BMM 算法分词</a></li><li class="chapter-item expanded "><a href="../../lab/03/index.html"><strong aria-hidden="true">1.3.</strong> 实验 3：使用 2 元文法消除歧义</a></li><li class="chapter-item expanded "><a href="../../lab/misc/report-template.html"><strong aria-hidden="true">1.4.</strong> 实验报告模板</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -146,19 +146,18 @@
                     <main>
                         <h1 id="自然语言处理"><a class="header" href="#自然语言处理">自然语言处理</a></h1>
 <p style="text-align: center;">实验二</p>
-<img src="./assets/logo.svg" alt="School Logo" style="max-width: 30%;">
-<!-- {{#include ../misc/authors.html}} -->
+<img src="../misc/logo.svg" alt="School Logo" style="max-width: 30%;">
 <table>
     <style>
-        th { text-justify: distribute; text-align-last: justify; text-align: justify; text-align: center; }
-        td { text-align: center; }
+        td.distrib { text-justify: distribute; text-align-last: justify; text-align: justify; text-align: center; }
+        td.center { text-align: center; }
     </style>
     <tbody>
-        <tr><th>学院</th><td>信息工程学院</td></tr>
-        <tr><th>指导教师</th><td>孙媛</td></tr>
-        <tr><th>班级</th><td>19 级计算机科学与技术 1 班</td></tr>
-        <tr><th>学生姓名</th><td>John Doe</td></tr>
-        <tr><th>学号</th><td>19000000</td></tr>
+        <tr><td class="distrib">学院</th><td class="center">信息工程学院</td></tr>
+        <tr><td class="distrib">指导教师</th><td class="center">孙媛</td></tr>
+        <tr><td class="distrib">班级</th><td class="center">19 级计算机科学与技术 1 班</td></tr>
+        <tr><td class="distrib">学生姓名</th><td class="center">John Doe</td></tr>
+        <tr><td class="distrib">学号</th><td class="center">19000000</td></tr>
     </tbody>
 </table>
 <p style="text-align: center;">日期： 2021 年 10 月 21 日</p>
@@ -815,6 +814,8 @@ miss += [i for i in result if i not in truth]
 <li><a href="https://zhuanlan.zhihu.com/p/100552669">NLP 中文分词的评估指标 - 知乎</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Natural_language_processing">Natural language processing - Wikipedia</a></li>
 <li><a href="https://stackoverflow.com/questions/11015320/how-to-create-a-trie-in-python/11015381">https://stackoverflow.com/questions/11015320/how-to-create-a-trie-in-python/11015381</a></li>
+<li><a href="https://blog.csdn.net/weixin_41510260/article/details/104181827">《自然语言处理入门》笔记 - 2. 词典分词 - CSDN</a></li>
+<li><a href="https://github.com/NLP-LOVE/Introduction-NLP">NLP-LOVE/Introduction-NLP: HanLP 作者的新书《自然语言处理入门》详细笔记</a></li>
 </ul>
 
                     </main>
@@ -824,7 +825,7 @@ miss += [i for i in result if i not in truth]
                             <a rel="prev" href="../../lab/01/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../../lab/misc/report-template.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../../lab/03/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -836,7 +837,7 @@ miss += [i for i in result if i not in truth]
                     <a rel="prev" href="../../lab/01/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../../lab/misc/report-template.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../../lab/03/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
