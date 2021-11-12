@@ -13,6 +13,7 @@ dict_seg = DictSeg()
 dict_seg.load_wordlist("../02/new_wordlist.dic")
 
 while True:
+    # 从标准输入逐行读入训练语料
     line = input("Train material: ")
     line = line.strip()
 
@@ -20,10 +21,16 @@ while True:
         break
 
     l = jieba.lcut(line)
-    print("jieba:", l)
+    
+    # print("jieba:", l)
+
+    # 如果是从文件读入分词的结果，则加入 split 后得到的列表
+
+    # train 方法考虑了有标点符号的情况
     model.train(l)
 
 while True:
+    # 从标准输入逐行读入，可根据需要修改为从文件读入
     line = input()
     line = line.strip()
     
@@ -35,7 +42,7 @@ while True:
 
     ground_truth = jieba.lcut(line)  # 'ground truth'
     
-    print('{:<11}'.format("jieba:"), "/".join(ground_truth))
+    print('{:<11}'.format("jieba"), "/".join(ground_truth))
 
     print('-' * 20)
 
@@ -48,6 +55,10 @@ while True:
     print(fmm)
     print(bmm)
     
+    # 由于分词结果中可能存在标点符号，先根据标点符号进行断句，再进行处理
+
+    result = [] # 消歧结果
+
     i = 0
     j = 0
 
@@ -77,7 +88,7 @@ while True:
         for c in combinations:
             print(c)
         
-        print("max", max(combinations, key=lambda c:c['p']))
+        max_prob = max(combinations, key=lambda c:c['p'])
 
         # for c in map.all_possible_combinations():
         #     print(c)
@@ -88,4 +99,9 @@ while True:
         #         tp2 = model.calc_probabilty(t, "ADD_ONE")
         #         print(t, tp1, tp2)
         #         tot_p *= tp2
+
+        result += max_prob['l']
+        result.append(fmm[k])
+    
+    print_PRF(ground_truth, result, "Final")
 
