@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="761px" height="161px" viewBox="-0.5 -0.5 761 161">
+	<defs />
+	<style>
+		text { 
+			font-family: "Times New Roman", SimSun, sans-serif; 
+			fill: black; 
+			font-size: 12px;
+			text-anchor: middle;
+		}
+	</style>
+	<g>
+		<rect x="0" y="0" width="60" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="30" y="34">&lt;BOS&gt;</text>
+		</g>
+		<rect x="100" y="0" width="60" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="130" y="34">他</text>
+		</g>
+		<rect x="200" y="0" width="60" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="230" y="34">是</text>
+		</g>
+		<rect x="300" y="100" width="60" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="330" y="134">研究生</text>
+		</g>
+		<rect x="300" y="0" width="60" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="330" y="34">研究</text>
+		</g>
+		<rect x="400" y="0" width="60" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="430" y="34">生物</text>
+		</g>
+		<rect x="500" y="100" width="60" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="530" y="134">物</text>
+		</g>
+		<rect x="600" y="0" width="60" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="630" y="34">的</text>
+		</g>
+		<path d="M 60 30 L 93.63 30" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 98.88 30 L 91.88 33.5 L 93.63 30 L 91.88 26.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<path d="M 160 30 L 193.63 30" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 198.88 30 L 191.88 33.5 L 193.63 30 L 191.88 26.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<path d="M 260 30 L 293.63 30" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 298.88 30 L 291.88 33.5 L 293.63 30 L 291.88 26.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<path d="M 260 60 L 295.5 95.5" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 299.21 99.21 L 291.78 96.73 L 295.5 95.5 L 296.73 91.78 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<path d="M 360 130 L 493.63 130" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 498.88 130 L 491.88 133.5 L 493.63 130 L 491.88 126.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<path d="M 560 100 L 595.5 64.5" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 599.21 60.79 L 596.73 68.22 L 595.5 64.5 L 591.78 63.27 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<path d="M 360 30 L 393.63 30" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 398.88 30 L 391.88 33.5 L 393.63 30 L 391.88 26.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<rect x="700" y="0" width="60" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="730" y="34">&lt;EOS&gt;</text>
+		</g>
+		<path d="M 660 30 L 693.63 30" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 698.88 30 L 691.88 33.5 L 693.63 30 L 691.88 26.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<path d="M 460 30 L 593.63 30" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 598.88 30 L 591.88 33.5 L 593.63 30 L 591.88 26.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+	</g>
+</svg>
