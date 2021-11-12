@@ -10,5 +10,5 @@ m.add_to_word_map(cut2)
 
 print(m.l)
 
-for l in m.all_possible_combinations():
-    print(l)
+for c in m.all_possible_combinations():
+    print(c)

@@ -69,7 +69,7 @@ p(s) & = p(w_1 w_2 \cdots w_n) \\
 \end{align}
 \]</p>
 
-上式中，\\(w\_0\\) 为句子开始的标志（Begin Of Sentence），记作 \\(\\text{\<BOS\>}\\)，\\(w\_n+1}\\) 表示句子结束的标志（End Of Sentence），记作 \\(\\text{\<EOS\>}\\)。
+上式中，\\(w\_0\\) 为句子开始的标志（Begin Of Sentence），记作 \\(\\text{\<BOS\>}\\)，\\(w\_{n+1}\\) 表示句子结束的标志（End Of Sentence），记作 \\(\\text{\<EOS\>}\\)。
 
 但是，上述方式下，随着历史串的长度的增加，语言模型中参数 *p* 的计算代价就会变得十分昂贵。于是，我们可以只考虑前 \\(N-1\\) 个基元，以得到一个近似的概率，这时得到的语言模型就称为 *N* 元文法（*N*-Gram）。
 
@@ -209,13 +209,55 @@ punctuations = {',', '，', ';', '；', '。', '!', '！', '?', '？', '（', '�
 
 ## 三、整体框架
 
-包含整体框图，各主要模块的功能。
+通过编程，构建了二元文法模型以及词图模型。
 
-图表都需要 **带编号**
+首先使用对语料的分词结果（训练材料）对二元文法模型进行训练。
+
+之后，结合词库使用 FMM、BMM 算法进行分词，根据分词结果生成词图，并通过词图得到所有可能的组合，并为每种组合计算概率，求出概率最高的情况，作为“消歧”后的结果。
 
 ## 四、主要程序模块
 
 详细介绍各个主要模块的功能及实现流程。
+
+### 二元语法模型
+
+[bigram_model.py](./bigram_model.py)
+
+```python
+{{#include bigram_model.py}}
+```
+
+### 词图建立
+
+[word_map.py](./word_map.py)
+
+```python
+{{#include word_map.py}}
+```
+
+词图建立用法说明：[word_map_test.py](word_map_test.py)
+
+```python
+{{#include word_map_test.py}}
+```
+
+### 打印帮助
+
+[print_helper.py](./print_helper.py)
+
+```python
+{{#include print_helper.py}}
+```
+
+### 测试程序
+
+[bigram_model_test.py](./bigram_model_test.py)
+
+```python
+{{#include bigram_model_test.py}}
+```
+
+
 
 ## 五、实验结果
 
