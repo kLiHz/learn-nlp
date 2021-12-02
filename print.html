@@ -1431,10 +1431,8 @@ def bigram_pairing(seg_list):
             former_word = BOS
             continue
         else:
-            if word.isdigit():
-                yield (former_word, NUMERAL)
-            else:
-                yield (former_word, word)
+            word = NUMERAL if word.isdigit() else word
+            yield (former_word, word)
             former_word = word
     
     if former_word != BOS:
@@ -1490,6 +1488,9 @@ class BigramModel:
         使用 MLE 计算二元元组的概率
         &quot;&quot;&quot;
         w1, w2 = t
+
+        w1 = NUMERAL if w1.isdigit() else w1        
+        w2 = NUMERAL if w2.isdigit() else w2
 
         c_w1 = self.uni_cnt.get(w1, 0)
         
