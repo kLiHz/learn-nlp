@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="422px" height="121px" viewBox="-0.5 -0.5 422 121">
+	<defs />
+    <style>
+		text { 
+			font-family: "Times New Roman", SimSun, sans-serif; 
+			fill: black; 
+			font-size: 12px;
+			text-anchor: middle;
+		}
+	</style>
+	<g>
+		<path d="M 20 40 L 20 73.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 20 78.88 L 16.5 71.88 L 20 73.63 L 23.5 71.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<path d="M 40 20 L 73.63 20" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 78.88 20 L 71.88 23.5 L 73.63 20 L 71.88 16.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<rect x="0" y="0" width="40" height="40" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="20" y="24">D6</text>
+		</g>
+		<path d="M 100 40 L 100 73.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 100 78.88 L 96.5 71.88 L 100 73.63 L 103.5 71.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<path d="M 120 20 L 153.63 20" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 158.88 20 L 151.88 23.5 L 153.63 20 L 151.88 16.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<rect x="80" y="0" width="40" height="40" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="100" y="24">D8</text>
+		</g>
+		<path d="M 180 40 L 180 73.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 180 78.88 L 176.5 71.88 L 180 73.63 L 183.5 71.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<path d="M 200 20 L 233.63 20" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 238.88 20 L 231.88 23.5 L 233.63 20 L 231.88 16.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<rect x="160" y="0" width="40" height="40" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="180" y="24">D8</text>
+		</g>
+		<path d="M 260 40 L 260 73.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 260 78.88 L 256.5 71.88 L 260 73.63 L 263.5 71.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<path d="M 280 20 L 313.63 20" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 318.88 20 L 311.88 23.5 L 313.63 20 L 311.88 16.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<rect x="240" y="0" width="40" height="40" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="260" y="24">D6</text>
+		</g>
+		<path d="M 340 40 L 340 73.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 340 78.88 L 336.5 71.88 L 340 73.63 L 343.5 71.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<path d="M 360 20 L 373.63 20" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 378.88 20 L 371.88 23.5 L 373.63 20 L 371.88 16.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<rect x="320" y="0" width="40" height="40" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="340" y="24">D4</text>
+		</g>
+		<ellipse cx="20" cy="100" rx="20" ry="20" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="20" y="104">1</text>
+		</g>
+		<ellipse cx="100" cy="100" rx="20" ry="20" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="100" y="104">6</text>
+		</g>
+		<ellipse cx="180" cy="100" rx="20" ry="20" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="180" y="104">3</text>
+		</g>
+		<ellipse cx="260" cy="100" rx="20" ry="20" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="260" y="104">5</text>
+		</g>
+		<ellipse cx="340" cy="100" rx="20" ry="20" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="340" y="104">2</text>
+		</g>
+		<rect x="380" y="10" width="40" height="20" fill="none" stroke="none" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="400" y="24">...</text>
+		</g>
+	</g>
+</svg>
