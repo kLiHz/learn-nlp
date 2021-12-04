@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="441px" height="161px" viewBox="-0.5 -0.5 441 161" content="&lt;mxfile&gt;&lt;diagram id=&quot;wf-Mw0IrCOWB4x585lSs&quot; name=&quot;Page-1&quot;&gt;3ZdNj5swEIZ/zdz5dMwREtK9pIdSqWcreIMlwKljQtJf3zGYEES2qlSJVbmY8esB7JnHgwF/W92+KHYuDjLnJXhOfgN/B55HKMXWCPdeCAnphZMSeS+5o5CJX9yKjlUbkfPLxFFLWWpxnopHWdf8qCcaU0q2U7d3WU7femYnPhOyIyvn6g+R66JXqbcZ9TcuTsXwZpdE/UjFBme7kkvBctk+SX4K/lZJqXurum15aWI3xKW/b//B6GNiitf6b26wM77o+7A2nuNSbbeWNV6SQlcl9lw032WtbT7cob9nlSj7TJKfjZl58l1UmB/P+cpbbL/JitXjIHhbFDNRZU3d2xeuxHs3YiZjZvDhcqx0kY06Wi/PEsDUiVsv/xFKRJDLimt1RxfFS6bFdfp0ZmE4PfzGeKFhQ/Y6fPbVV1Y29qGQUoj3kCSQhkD3EBFIiWnpBtLA6AmZxVzJps65eaaDUWgLoXl2Zt36WtxAy6fgypXmtz8nYR5ee0Ng2b5Pu+24U9wB/+JplxDn3/NBV4CzP8c5WAhn/wXOSDHCGxojTiGJII0g9oAGnRJ0xgYix7itm2vP+TywoxWAHczBDhcCO3hdp1OId4ZerMoU2XfeDgdsTcGOcdQ1hEcp0GTlYPvk88AejnT/NdnhnGyyENnhC7IJJC7QHvENxL4p2VFsajSyTmNzAkEfiiW7QzyJzUHFFHoK0fxAuC7WPTpl3V0SdvIyWbHTfVYxIztTkjwnSQ9ZV4dmuekN/NL2p0y6W3m2HplYIFvYHf+7urGnn1c//Q0=&lt;/diagram&gt;&lt;/mxfile&gt;">
+	<defs />
+	<style>
+		text {
+		    font-family: "Times New Roman", SimSun, sans-serif;
+		    fill: black;
+		    font-size: 12px;
+		    text-anchor: middle;
+		}
+	</style>
+	<g>
+		<path d="M 120 30 L 153.63 30" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 158.88 30 L 151.88 33.5 L 153.63 30 L 151.88 26.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<rect x="0" y="0" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="60" y="33">
+				读取文件
+			</text>
+		</g>
+		<path d="M 280 30 L 313.63 30" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 318.88 30 L 311.88 33.5 L 313.63 30 L 311.88 26.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<rect x="160" y="0" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="220" y="33">
+				内容预处理
+			</text>
+		</g>
+		<path d="M 356 60 L 327.98 95.03" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 324.7 99.13 L 326.34 91.47 L 327.98 95.03 L 331.8 95.85 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<rect x="320" y="0" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="380" y="33">
+				训练 HMM 模型
+			</text>
+		</g>
+		<path d="M 240 130 L 206.37 130" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
+		<path d="M 201.12 130 L 208.12 126.5 L 206.37 130 L 208.12 133.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all" />
+		<rect x="240" y="100" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="300" y="133">
+				求解隐状态序列
+			</text>
+		</g>
+		<rect x="80" y="100" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="all" />
+		<g transform="translate(-0.5 -0.5)">
+			<text x="140" y="133">
+				根据 BEMS 序列分词
+			</text>
+		</g>
+	</g>
+</svg>
