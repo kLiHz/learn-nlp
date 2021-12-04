@@ -1,0 +1,549 @@
+<!DOCTYPE HTML>
+<html lang="zh-Hans" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>实验 4：基于 HMM 的文本分词 - Learn NLP</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../theme/css/custom-style.css">
+        <link rel="stylesheet" href="../../theme/css/custom-font.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">首页</a></li><li class="chapter-item expanded "><a href="../../lab/index.html"><strong aria-hidden="true">1.</strong> 实验</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lab/01/index.html"><strong aria-hidden="true">1.1.</strong> 实验 1：互联网语料获取</a></li><li class="chapter-item expanded "><a href="../../lab/02/index.html"><strong aria-hidden="true">1.2.</strong> 实验 2：使用 FMM、BMM 算法分词</a></li><li class="chapter-item expanded "><a href="../../lab/03/index.html"><strong aria-hidden="true">1.3.</strong> 实验 3：使用 2 元文法消除歧义</a></li><li class="chapter-item expanded "><a href="../../lab/04/index.html" class="active"><strong aria-hidden="true">1.4.</strong> 实验 4：基于 HMM 的文本分词</a></li><li class="chapter-item expanded "><a href="../../lab/misc/report-template.html"><strong aria-hidden="true">1.5.</strong> 实验报告模板</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Learn NLP</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/tsagaanbar/learn-NLP" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/tsagaanbar/learn-NLP/edit/main/src/lab/04/README.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="自然语言处理实验"><a class="header" href="#自然语言处理实验">自然语言处理实验</a></h1>
+<p style="text-align: center;">实验四</p>
+<p style="text-align: center;">基于 HMM 的文本分词</p>
+<img src="../misc/logo.svg" alt="School Logo" style="max-width: 30%;">
+<table>
+    <style>
+        td.distrib { text-justify: distribute; text-align-last: justify; text-align: justify; text-align: center; }
+        td.center { text-align: center; }
+    </style>
+    <tbody>
+        <tr><td class="distrib">学院</td><td class="center">信息工程学院</td></tr>
+        <tr><td class="distrib">指导教师</td><td class="center">孙媛</td></tr>
+        <tr><td class="distrib">班级</td><td class="center">19 级计算机科学与技术 1 班</td></tr>
+        <tr><td class="distrib">学生姓名</td><td class="center">John Doe</td></tr>
+        <tr><td class="distrib">学号</td><td class="center">19000000</td></tr>
+    </tbody>
+</table>
+<p style="text-align: center;">日期： 2021 年 12 月 2 日</p>
+<div style="page-break-after: always;"></div>
+<h2 id="目录"><a class="header" href="#目录">目录</a></h2>
+<h2 id="一实验内容"><a class="header" href="#一实验内容">一、实验内容</a></h2>
+<p>采用一阶隐马尔可夫模型（HMM）进行分词</p>
+<ul>
+<li>利用训练语料得到 HMM 模型，采用 B、M、E、S 标记，完成分词；</li>
+<li>计算 P、R、F1 值。</li>
+</ul>
+<p>参考训练语料为“1998 人民日报（已分词）”，可根据需要自行修改格式，也可以在训练语料中加入 jieba 分词的结果。</p>
+<h2 id="二实验原理"><a class="header" href="#二实验原理">二、实验原理</a></h2>
+<h3 id="马尔可夫模型"><a class="header" href="#马尔可夫模型">马尔可夫模型</a></h3>
+<p>如果一个系统有 <em>N</em> 个状态 \( S_1, S_2, ..., S_N\)，随着时间的推移，该系统从某一状态转移到另一状态。系统在时间 <em>t</em> 的状态记为 \(q_t\)。系统在时间 <em>t</em> 处于状态 \(S_j (1 \leq j \leq N)\) 的概率取决于其在时间 1, 2, ..., \(t-1\) 的状态，该概率为：</p>
+<p>\[
+P(q_t = S_j | q_{t-1} = S_i, q_{t-2} = S_k, ...)
+\]</p>
+<p>如果在特定情况下，系统在时间 <em>t</em> 的状态只与其在时间 \(t-1\) 的状态相关，则该系统构成一个离散的一阶马尔可夫链，其概率可以表示为：</p>
+<p>\[
+P(q_t = S_j | q_{t-1} = S_i)
+\]</p>
+<p>比如天气预测，如果我们知道“晴天，多云，雨天”之间的转换概率，那么如果今天是晴天，我们就可以推断出明天是各种天气的概率，接着后天的天气可以由明天的进行计算。这类问题可以用 Markov 模型来描述。</p>
+<p>如果只考虑上述公式独立于时间 <em>t</em> 的随机过程（不动性假设），即状态与时间无关，那么：</p>
+<p>\[ P(q_t = S_j | q_{t-1} = S_i) = a_{ij}, 1 \leq i, j \leq N \]</p>
+<p>其中，\(a_{ij}\) 称为状态转移概率，该随机过程称为<strong>马尔可夫模型</strong>。</p>
+<p>在马尔可夫模型中，状态转移概率 \(a_{ij}\) 必须满足下列条件：</p>
+<p>\[ \begin{cases} 
+&amp; a_{ij} \geq 0, \\ 
+&amp; \sum_{j=1}^{N}{a_{ij}} = 1
+\end{cases} \]</p>
+<p>马尔可夫模型又可视为随机有限状态机，该有限状态机的每一个状态转换过程都有一个相应的概率，表示自动机采用这一状态转换的可能性。</p>
+<p>马尔可夫链可以表示为状态图，则每个节点上所有发出弧的概率之和等于 1。</p>
+<h3 id="状态序列"><a class="header" href="#状态序列">状态序列</a></h3>
+<p>状态序列 \( S_1, S_2, ..., S_T \) 的概率可由下列公式计算。</p>
+<p>\[
+\begin{align}
+P(S_1, S_2, ..., S_T)
+&amp; = P(S_1) P(S_2 | S_1) P(S_3 | S_1, S_2) \cdots P(S_T|S_1, S_2, ..., S_{T-1}) \\
+&amp; = P(S_1) P(S_2 | S_1) P(S_3 | S_2) \cdots P(S_T | S_{T-1}) \\
+&amp; = \pi_{S_1}\prod_{t=1}^{T-1}{a_{S_t S_{t+1}}}
+\end{align}
+\]</p>
+<p>其中，\(\pi_k\) 表示初始状态为 \(k\) 的概率。</p>
+<h3 id="隐马尔可夫模型"><a class="header" href="#隐马尔可夫模型">隐马尔可夫模型</a></h3>
+<p>隐马尔可夫模型（Hidden Markov Model, HMM） 是一个双重随机过程，我们知道状态转移的概率，但不知道具体的状态序列、无法看到模型的状态转换过程，只能观察到隐蔽的状态转换过程的随机函数。</p>
+<p>举个例子，有三个不同的骰子，分别是六面体骰子（记作 D6，有 1 ~ 6 六个面，每个面出现的概率是 \(\frac 1 6\)）、四面体骰子（记作 D4，有 1 ~ 4 四个面，每个面出现的概率是 \(\frac 1 4\)）以及八面体骰子（记作 D8，有 1 ~ 8 八个面，每个面出现的概率是 \(\frac 1 8\)）。</p>
+<p>接下来，假设投掷 10 次骰子，每次选择其中一个骰子，投掷得到的数字是 1 ~ 8 中的一个。这个过程中，我们无法观测到时使用哪个骰子投掷，仅仅能看到投掷的结果，也就是一串 1 到 8 之间的数字。这串数字即是可见状态链，而过程中每次掷出数字的骰子所形成的序列即为隐含状态链。</p>
+<p><img src="./assets/HMM-demo.svg" alt="HMM Demo" /></p>
+<p>一般来说，HMM 中的马尔科夫链指的是隐含状态链，因为隐含状态之间存在转换概率（transition probability）。在上述掷骰子的例子中，若每次随机选择骰子，则转换概率矩阵中的值均为 \(\frac 1 3\)。</p>
+<p>此外，尽管可见状态之间没有转换概率，但是隐含状态和可见状态之间存在输出概率（emission probability）。比如，六面体骰子 D6 掷出数字 1 ~ 6 的概率均为 \(\frac 1 6\)。</p>
+<h3 id="bems-标注"><a class="header" href="#bems-标注">BEMS 标注</a></h3>
+<p>对于中文分词结果中的每一个字，我们可以使用 B、E、M、S 来进行标注。其中，B代表词语中的起始字，M 代表词语中的中间字，E 代表词语中的结束字，S 则代表单字成词的字。</p>
+<p>因此，我们可以用 B、E、M、S 组成的序列串来表示分词的结果。比如，有下面这样的分词结果：</p>
+<blockquote>
+<p>一/只/黑叶猴/吃/了/游客/投喂/的/食物</p>
+</blockquote>
+<p>则该结果对应的序列串为：</p>
+<table><thead><tr><th align="center">S</th><th align="center">S</th><th align="center">BME</th><th align="center">S</th><th align="center">S</th><th align="center">BE</th><th align="center">BE</th><th align="center">S</th><th align="center">BE</th></tr></thead><tbody>
+<tr><td align="center">一</td><td align="center">只</td><td align="center">黑叶猴</td><td align="center">吃</td><td align="center">了</td><td align="center">游客</td><td align="center">投喂</td><td align="center">的</td><td align="center">食物</td></tr>
+</tbody></table>
+<p>如果要用 HMM 模型解决分词问题，则目标的 BEMS 序列即为模型的隐藏状态序列，而待分词的语句则为观测得到的序列。</p>
+<h3 id="hmm-模型应用"><a class="header" href="#hmm-模型应用">HMM 模型应用</a></h3>
+<p>对于 HMM 来说，如果已知所有隐含状态之间的转换概率，和所有隐含状态到所有可见状态之间的输出概率，是很容易模拟某个过程的。但实际应用 HMM 时，往往是缺失了一部分信息的，比如，有时候已知骰子的种类数、每种骰子可能掷出的状态，但是不知道掷出来的骰子序列；有时候仅有很多次掷骰子的结果，其余的信息均为未知状态。如何应用算法去估计这些缺失的信息，是一个很重要的问题。</p>
+<h3 id="解决分词问题"><a class="header" href="#解决分词问题">解决分词问题</a></h3>
+<p>和 HMM 模型相关的算法主要分为三类。而要解决分词的问题，其实类似于已知结果序列（可见状态链）、骰子的数量及类型（隐含状态数量、发射概率）以及转换概率，而求每次掷出的骰子种类（隐藏状态链）。</p>
+<p>我们知道，根据某一骰子序列，我们可以求得掷出某一结果序列的概率。</p>
+<p>比如 D6、D8、D8 掷出序列 1、6、3 的概率为：</p>
+<p>\[
+P = P(D6) P(D6 \to 1) P(D8 | D6) P(D8 \to 6) P(D8 | D8) P(D8 \to 3)
+\]</p>
+<p>而要找到掷出某一结果序列的最可能的骰子序列，理论上可以穷举出所有的骰子序列，分别计算出它们掷出该结果的概率，则最高概率对应的骰子序列即为最可能的骰子序列。</p>
+<p>若模型有 <em>N</em> 个状态，观察序列长度为 <em>T</em>，则可能的隐藏状态序列有 \(N^T\) 种。随着长度 <em>T</em> 的增长，可能的状态序列数呈指数级增长，几乎无法计算。</p>
+<p>假设只掷一次骰子，结果为 1，则最可能掷出该结果的骰子为 D4，其概率为 \(\frac 1 4\)，大于 D6 的 \(\frac 1 6\) 和 D8 的\(\frac 1 8\)。</p>
+<p>接下来，若掷两次骰子，结果为 1、6。我们希望得知掷出该结果的最可能的骰子序列，亦即掷出该结果的概率最大的骰子序列。显然，要取得最大概率，第一个骰子必须是 D4，此时，我们需要分别计算第二个骰子是 D4、D6、D8 时掷出该结果的概率。</p>
+<p>第二个骰子是 D4 时，掷出该结果的概率：</p>
+<p>\[P = P(D4) P(D4 \to 1) P(D4 | D4) P(D4 \to 6) \]</p>
+<p>第二个骰子是 D6 时，掷出该结果的概率：</p>
+<p>\[P = P(D4) P(D4 \to 1) P(D6 | D4) P(D6 \to 6) \]</p>
+<p>第二个骰子是 D8 时，掷出该结果的概率：</p>
+<p>\[P = P(D4) P(D4 \to 1) P(D8 | D4) P(D8 \to 6) \]</p>
+<p>可以得出，当第二个骰子为 D6 时，掷出该结果的概率最大。</p>
+<p>当掷三次骰子、结果序列为 1、6、3 时，根据之前的推算能够得知，要得到最大的概率，前两个骰子必须为 D4、D6。如此的思路适用于投掷任意次骰子。</p>
+<p>而对于分词问题，我们可以认为 B、E、M、S 为四种可能的隐状态，每种隐状态有一初始概率，每种隐状态之间存在转移概率，每个状态可能产生出若干显状态（发射概率），</p>
+<h3 id="定义-hmm-模型"><a class="header" href="#定义-hmm-模型">定义 HMM 模型</a></h3>
+<p>将转移概率矩阵记作 <em>A</em>，其中每个元素 \(a_{ij}\) 表示状态 \(S_i\) 转向 \(S_j\) 的概率。</p>
+<p>\[ \begin{cases} 
+&amp; a_{ij} = P(q_{t+1}=S_j|q_t=S_i) \\ 
+&amp; a_{ij} \geq 0 \\ 
+&amp; \sum_{j=1}^{N}{a_{ij}} = 1
+\end{cases}, 1 \leq i, j \leq N \]</p>
+<p>将发射概率记作 <em>B</em>，其中每个元素 \(b_j(k)\) 表示从状态 \(S_j\) 观察到符号 \(v_k\) 的概率。</p>
+<p>\[ \begin{cases} 
+&amp; b_j(k) = P(O_t = v_k | q_t = S_j) \\ 
+&amp; b_j(k) \geq 0 \\ 
+&amp; \sum_{k=1}^{M}{b_j(k)} = 1
+\end{cases}, 1 \leq j \leq N, 1 \leq k \leq M \]</p>
+<p>初始概率记作 \(\pi\)，其中 \(\pi_k\) 表示初始状态为 \(k\) 的概率。</p>
+<p>\[
+\begin{cases}
+&amp; \pi_i = P(q_1 = S_i) \\
+&amp; \pi_i \geq 0 \\
+&amp; \sum_{i=1}^{N}{\pi_i} = 1
+\end{cases}, 1 \leq i \leq N
+\]</p>
+<p>为了方便，一般将 HMM 记为 \( \mu = (A,B,\pi) \)。</p>
+<h2 id="三整体框架"><a class="header" href="#三整体框架">三、整体框架</a></h2>
+<figure>
+<p><img src="./assets/structure.svg" alt="Program structure" />
+<figcaption>图 1：程序流程图</figcaption></p>
+</figure>
+<h2 id="四主要程序模块"><a class="header" href="#四主要程序模块">四、主要程序模块</a></h2>
+<h3 id="文件操作"><a class="header" href="#文件操作">文件操作</a></h3>
+<p>通过 <em>file_glob()</em> 函数调用获得到指定目录下的所有文件。 </p>
+<pre><code class="language-python">def file_glob(path):
+    &quot;&quot;&quot;
+    获得目录下的所有文件
+    :param path: 目录名
+    :return: 文件名（生成器）
+    &quot;&quot;&quot;
+    ignore = ['href', '简介', 'segmented', '#']
+    for root, subdirs, files in os.walk(path):
+        for f in files:
+            file_name = os.path.join(root, f)
+
+            # 如果文件名含有某些特征，跳过
+            should_pass = False
+            for kw in ignore:
+                if file_name.find(kw) != -1:
+                    should_pass = True
+                    break
+            if should_pass: continue
+                    
+            yield file_name
+
+</code></pre>
+<h3 id="矩阵初始化"><a class="header" href="#矩阵初始化">矩阵初始化</a></h3>
+<p>通过<code>init_matrix()</code> 函数调用对矩阵进行初始化，在训练过程中分别对 <code>start_prob_matrix</code>、<code>trans_prob_matrix</code>、<code>trans_prob_matrix</code> 进行计算。 </p>
+<pre><code class="language-python">def init_matrix(file_path):
+    global character_count
+
+    with open(file_path, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:
+        global character_count
+        contents = f.read()
+        arr_contents = get_jieba_contents(contents)
+        #print(arr_contents)
+        sentences = get_each_sentence(&quot; &quot;.join(arr_contents))
+        #print(sentences)
+        for sentence in sentences:
+            handle_sentence(sentence)
+</code></pre>
+<p>通过 <code>calculate_probability()</code> 函数调用来对各个矩阵进行计算。</p>
+<pre><code class="language-python">def calculate_propability():
+    # 根據出現的字符的總個數來計算 概率
+    divisor = sum(start_probability_matrix.values())
+    for key in start_probability_matrix:
+
+        if start_probability_matrix[key] != 0:
+            start_probability_matrix[key] /= divisor
+            start_probability_matrix[key] = math.log(start_probability_matrix[key])
+        else:
+            start_probability_matrix[key] = -3.14e+100
+
+
+    for key_1 in trans_probability_matrix:
+        divisor = sum(trans_probability_matrix[key_1].values())
+        for key_2 in trans_probability_matrix[key_1]:
+            if trans_probability_matrix[key_1][key_2] != 0:
+                trans_probability_matrix[key_1][key_2] /= divisor
+                trans_probability_matrix[key_1][key_2] = math.log(trans_probability_matrix[key_1][key_2])
+            else:
+                trans_probability_matrix[key_1][key_2] = -3.14e+100
+
+
+    for key in emit_probability_matrix:
+        divisor = sum(emit_probability_matrix[key].values())
+        for character in emit_probability_matrix[key]:
+            emit_probability_matrix[key][character] /= divisor
+            if emit_probability_matrix[key][character] != 0:
+                emit_probability_matrix[key][character] = math.log(emit_probability_matrix[key][character])
+            else:
+                emit_probability_matrix[key][character] = -3.14e+100
+</code></pre>
+<pre><code class="language-python">def handle_sentence(sentence):
+    #對 單個句子進行處理
+    sentence = sentence.split(&quot; &quot;)
+
+    if len(sentence) == 1 and sentence[0] in special_character:  # 特殊符號，跳過不予理會
+        return None
+
+    else:
+        temp_pattern = None
+        print(sentence)
+        for word in sentence:
+            if word in special_character:
+                continue
+            print(word)
+            if temp_pattern == None:
+                temp_pattern = handle_single_first_word(word, temp_pattern)     #處理句子開頭的字
+                print(&quot;開頭：&quot;, word)
+
+            else:
+                temp_pattern = handle_single_word(word, temp_pattern)           #處理句子其他地方的字
+
+</code></pre>
+<h3 id="变量初始化"><a class="header" href="#变量初始化">变量初始化</a></h3>
+<p>其中， <code>split_character</code> 中的字符用于将文章按照指定的分隔符划分为一个个的短句。<code>special_character</code>中的字符用于将文字间的特殊符号去除掉，以便于接下来的分词操作。<code>training_file_path</code> 用于存储训练集的路径；<code>test_file_path</code>用于存储测试时所需数据的路径。 </p>
+<pre><code class="language-python">split_character = &quot;(（|。|\(|\)|！|\!|\.|？|\?|\,|\，|）|\n)&quot;
+special_character = [&quot;(&quot;, &quot;)&quot;, &quot;（&quot;, &quot;）&quot;, &quot;\&quot;&quot;, &quot;\'&quot;,&quot;/&quot;, &quot;\\&quot;, &quot;.&quot;, &quot;。&quot;, &quot;、&quot;, &quot;\n&quot;, &quot;&quot;, &quot; &quot;,&quot;【&quot;, &quot;】&quot;, &quot;｀&quot;, &quot;✪&quot;, &quot;①&quot;, &quot;②&quot;, &quot;③&quot;, &quot;▽&quot;,&quot;，&quot;, &quot;\n&quot;, &quot;\r&quot;,&quot;”&quot;, &quot;：&quot; , '，', &quot;~&quot;, &quot;-&quot;,&quot;[&quot;, &quot;]&quot;, &quot;{&quot;, &quot;}&quot;, &quot;？&quot;]
+
+trainning_file_path = [&quot;.\\成都理工大学&quot;, &quot;.\\四川大学&quot;, &quot;.\\四川师范大学&quot;, &quot;.\\西南财经大学&quot;, &quot;.\\西南交通大学&quot;,
+                 &quot;.\\西南石油大学&quot;, &quot;.\\中央民族大学&quot;]
+
+test_file_path = [&quot;.\\重庆大学&quot;, &quot;.\\西华大学&quot;]
+PrevStatus = {
+    'B': 'ES',
+    'M': 'MB',
+    'S': 'SE',
+    'E': 'BM'
+}                                   #可能存在的状态转换
+MIN_FLOAT = -3.14e+100
+</code></pre>
+<h3 id="viterbi-算法"><a class="header" href="#viterbi-算法">Viterbi 算法</a></h3>
+<p>在 <code>Viterbi</code> 算法中，我们将概率通过 <code>log()</code> 函数进行处理，使得其在路径的计算过程中，将概率相互之间的乘法转变为了对数值之间的加法。</p>
+<p>有几个地方需要注意的是，在开头时字的状态只会是 B 或者是 S； 在句末处，字的状态只会是 S  或者 E 。</p>
+<p>另外，状态转移时应该满足 PrevStatus 的条件，即某些状态之间无法完成相互转换(如 B ---&gt; B)。</p>
+<pre><code class="language-python">def viterbi(obs, states, start_p, trans_p, emit_p):
+    V = [{}]  # tabular
+    path = {}
+    for y in states:  # init
+        V[0][y] = start_p[y] + emit_p[y].get(obs[0], MIN_FLOAT)
+        path[y] = [y]
+    for t in range(1, len(obs)):
+        V.append({})
+        newpath = {}
+
+        for y in states:
+            em_p = emit_p[y].get(obs[t], MIN_FLOAT)
+            (prob, state) = max(
+                [(V[t - 1][y0] + trans_p[y0].get(y, MIN_FLOAT) + em_p, y0) for y0 in PrevStatus[y]])
+            V[t][y] = prob
+            newpath[y] = path[state] + [y]
+        path = newpath
+
+    (prob, state) = max((V[len(obs) - 1][y], y) for y in 'ES')
+
+    return (prob, path[state])
+</code></pre>
+<h3 id="分词操作"><a class="header" href="#分词操作">分词操作</a></h3>
+<p>根据 &quot;BEMS&quot; 状态的特性即可以完成分词，不再过多的进行阐述。</p>
+<pre><code class="language-python">def foo(obs_seq, bems_seq):
+    out = []
+    s = ''
+    for ch, tag in zip(obs_seq, bems_seq):
+        if tag == 'S':
+            out.append(ch)
+        elif tag != 'E':
+            s += ch
+        else:
+            s += ch
+            out.append(s)
+            s = ''
+    return out
+
+</code></pre>
+<h3 id="文件写出"><a class="header" href="#文件写出">文件写出</a></h3>
+<p>部分代码如下：</p>
+<pre><code class="language-python">def file_write(filepath):
+    result = &quot;/&quot;
+    all_seg = []
+    for val in contents_1:
+        if val in special_character:
+            result += val
+            all_seg += [val]
+            continue
+        else:
+            val = [i for i in val if i not in special_character]
+            if len(val) == 0:
+                continue
+            seq = \
+            viterbi(val, &quot;BMES&quot;, start_probability_matrix, trans_probability_matrix, emit_probability_matrix)[1]
+            seg_list = foo(val, seq)
+            result += &quot;/&quot;.join(seg_list)
+            all_seg += seg_list
+   
+	with open(new_file_path, &quot;w&quot;, encoding=&quot;utf-8&quot;)as f:
+        f.write(result)
+</code></pre>
+<h3 id="prf-计算"><a class="header" href="#prf-计算">PRF 计算</a></h3>
+<p>统计词数然后即可计算 P、R、F 值，不再阐述。</p>
+<pre><code class="language-python">def calculate_precision(jieba_arr, generated_arr):
+    global all_counts1
+    global all_counts2
+    global correct_counts
+    start1 = 0
+    end1= len(jieba_arr)
+
+    start2 = 0
+    end2 = len(generated_arr)
+
+    while(True):
+        index1 = -1
+        try:
+            index1 = jieba_arr.index(&quot;，&quot;,start1, end1)          #在未找到时可能会报错，TRY包住
+        except:
+            pass
+        finally:
+            pass
+        temp_arr1 = [i for i in jieba_arr[start1: index1: 1] if i not in special_character]
+        start1 = index1 + 1
+        all_counts1 += len(temp_arr1)
+        index2 = -1
+        try:
+            index2 = generated_arr.index(&quot;，&quot;, start2, end2)     #理由同上
+        except:
+            pass
+        finally:
+            pass
+        temp_arr2 = [i for i in generated_arr[start2: index2: 1]if i not in special_character]     #去掉特殊符号
+        start2 = index2 + 1
+        all_counts2 += len(temp_arr2)
+        correct_counts += len([i for i in temp_arr2 if i in temp_arr1])    
+        if index1 == -1 or index2 == -1:
+            break
+</code></pre>
+<h2 id="五实验结果"><a class="header" href="#五实验结果">五、实验结果</a></h2>
+<figure>
+<p><img src="./assets/statistic-result.png" alt="分词结果统计" />
+<figcaption>图 2：分词结果统计</figcaption></p>
+</figure>
+<figure>
+<p><img src="./assets/segmented-text-screenshot.png" alt="分词结果展示" />
+<figcaption>图 3：分词结果展示</figcaption></p>
+</figure>
+<h2 id="六总结"><a class="header" href="#六总结">六、总结</a></h2>
+<p>收获颇丰。</p>
+<h2 id="参考文献"><a class="header" href="#参考文献">参考文献</a></h2>
+<p>如有参考文献，请附上。</p>
+<ul>
+<li><a href="https://www.cnblogs.com/skyme/p/4651331.html">一文搞懂 HMM (隐马尔可夫模型) - 博客园</a></li>
+<li><a href="https://www.jianshu.com/p/0eee07a5bf38">HMM (隐马尔科夫模型) 用于中文分词 - 简书</a></li>
+<li><a href="https://www.jianshu.com/p/f140c3a44ab6">一个隐马尔科夫模型的应用实例：中文分词 - 简书</a></li>
+<li><a href="https://blog.csdn.net/taoyanqi8932/article/details/75312822">基于 HMM 的中文分词</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)">Entropy (information theory)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Hidden_Markov_model">Hidden Markov model</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Forward_algorithm">Forward algorithm</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Viterbi_algorithm">Viterbi algorithm</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../lab/03/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../../lab/misc/report-template.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../lab/03/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../../lab/misc/report-template.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
