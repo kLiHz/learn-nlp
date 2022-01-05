@@ -189,7 +189,7 @@ P = P(D6) P(D6 \\to 1) P(D8 \| D6) P(D8 \\to 6) P(D8 \| D8) P(D8 \\to 3)
 
 ### 文件操作
 
-通过 *file_glob()* 函数调用获得到指定目录下的所有文件。 
+通过 `file_glob()` 函数调用获得到指定目录下的所有文件。 
 
 ```python
 def file_glob(path):
@@ -464,6 +464,41 @@ def calculate_precision(jieba_arr, generated_arr):
     <figcaption>图 3：分词结果展示</figcaption>
 </figure>
 
+### 不同训练语料的对比
+
+<table>
+<tr>
+<td><figure>
+
+![分词结果展示](./assets/1.png)
+    <figcaption>图 4：使用 1 份量语料训练的结果</figcaption>
+</figure>
+</td>
+<td><figure>
+
+![分词结果展示](./assets/3.png)
+    <figcaption>图 5：使用 3 份量语料训练的结果</figcaption>
+</figure>
+</td>
+</tr>
+<tr>
+<td><figure>
+
+![分词结果展示](./assets/5.png)
+    <figcaption>图 6：使用 5 份量语料训练的结果</figcaption>
+</figure>
+</td>
+<td><figure>
+
+![分词结果展示](./assets/7.png)
+    <figcaption>图 7：使用 7 份量语料训练的结果</figcaption>
+</figure>
+</td>
+</tr>
+</table>
+
+
+观察可得，随着训练语料数量的增加，最开始的效果提升较为显著，而当训练语料数量达到一定程度时，结果的提升不再明显。
 
 ## 六、总结
 
