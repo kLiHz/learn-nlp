@@ -1294,9 +1294,9 @@ miss += [i for i in result if i not in truth]
 <h2 id="二实验原理-2"><a class="header" href="#二实验原理-2">二、实验原理</a></h2>
 <p>在使用 FMM、BMM 等方式进行基于字典的分词时，总会遇到具有歧义的情况。</p>
 <p>例如，“商品和服务”经过 FMM、BMM 分词，可以有以下的分词结果：</p>
-<table><thead><tr><th align="center">分词方式</th><th align="center">分词结果</th></tr></thead><tbody>
-<tr><td align="center">FMM</td><td align="center">['商品', '和服', '务']</td></tr>
-<tr><td align="center">BMM</td><td align="center">['商品', '和', '服务']</td></tr>
+<table><thead><tr><th style="text-align: center">分词方式</th><th style="text-align: center">分词结果</th></tr></thead><tbody>
+<tr><td style="text-align: center">FMM</td><td style="text-align: center">['商品', '和服', '务']</td></tr>
+<tr><td style="text-align: center">BMM</td><td style="text-align: center">['商品', '和', '服务']</td></tr>
 </tbody></table>
 <p>显然，第二种情况更为合理，因为第二种出现的概率较前一种更高。这便是统计自然语言处理。</p>
 <p>于是，便可以通过对语言进行建模，以评估其出现的概率，进而达到消除歧义的目的。</p>
@@ -1395,9 +1395,9 @@ P(\text{&lt;EOS&gt;} | \text{book}   ) \)。</p>
 <p>对于某一句话，不同的分词方法，可能会得到不同的结果。结果中的不同之处被视作“歧义”。为了得到相对情况下最为准确的分词结果，需要在每处歧义选择最佳的词元组合。</p>
 <p>我们可以将不同分词结果中的分词情况表示在一张图上。</p>
 <p>下面以对“他是研究生物的”的两种分词结果为例。</p>
-<table><thead><tr><th align="center">分词方式</th><th align="center">分词结果</th></tr></thead><tbody>
-<tr><td align="center">FMM</td><td align="center">['他', '是', '研究生', '物', '的']</td></tr>
-<tr><td align="center">BMM</td><td align="center">['他', '是', '研究', '生物', '的']</td></tr>
+<table><thead><tr><th style="text-align: center">分词方式</th><th style="text-align: center">分词结果</th></tr></thead><tbody>
+<tr><td style="text-align: center">FMM</td><td style="text-align: center">['他', '是', '研究生', '物', '的']</td></tr>
+<tr><td style="text-align: center">BMM</td><td style="text-align: center">['他', '是', '研究', '生物', '的']</td></tr>
 </tbody></table>
 <p>上面两种分词结果可以形成一无环有向图，即下图所示的网络结构。</p>
 <p><img src="lab/03/assets/word-map-demo.svg" alt="word-map-demo" /></p>
@@ -1898,8 +1898,8 @@ P(S_1, S_2, ..., S_T)
 <p>一/只/黑叶猴/吃/了/游客/投喂/的/食物</p>
 </blockquote>
 <p>则该结果对应的序列串为：</p>
-<table><thead><tr><th align="center">S</th><th align="center">S</th><th align="center">BME</th><th align="center">S</th><th align="center">S</th><th align="center">BE</th><th align="center">BE</th><th align="center">S</th><th align="center">BE</th></tr></thead><tbody>
-<tr><td align="center">一</td><td align="center">只</td><td align="center">黑叶猴</td><td align="center">吃</td><td align="center">了</td><td align="center">游客</td><td align="center">投喂</td><td align="center">的</td><td align="center">食物</td></tr>
+<table><thead><tr><th style="text-align: center">S</th><th style="text-align: center">S</th><th style="text-align: center">BME</th><th style="text-align: center">S</th><th style="text-align: center">S</th><th style="text-align: center">BE</th><th style="text-align: center">BE</th><th style="text-align: center">S</th><th style="text-align: center">BE</th></tr></thead><tbody>
+<tr><td style="text-align: center">一</td><td style="text-align: center">只</td><td style="text-align: center">黑叶猴</td><td style="text-align: center">吃</td><td style="text-align: center">了</td><td style="text-align: center">游客</td><td style="text-align: center">投喂</td><td style="text-align: center">的</td><td style="text-align: center">食物</td></tr>
 </tbody></table>
 <p>如果要用 HMM 模型解决分词问题，则目标的 BEMS 序列即为模型的隐藏状态序列，而待分词的语句则为观测得到的序列。</p>
 <h3 id="hmm-模型应用"><a class="header" href="#hmm-模型应用">HMM 模型应用</a></h3>
@@ -1953,7 +1953,7 @@ P = P(D6) P(D6 \to 1) P(D8 | D6) P(D8 \to 6) P(D8 | D8) P(D8 \to 3)
 </figure>
 <h2 id="四主要程序模块-3"><a class="header" href="#四主要程序模块-3">四、主要程序模块</a></h2>
 <h3 id="文件操作"><a class="header" href="#文件操作">文件操作</a></h3>
-<p>通过 <em>file_glob()</em> 函数调用获得到指定目录下的所有文件。 </p>
+<p>通过 <code>file_glob()</code> 函数调用获得到指定目录下的所有文件。 </p>
 <pre><code class="language-python">def file_glob(path):
     &quot;&quot;&quot;
     获得目录下的所有文件
@@ -2174,6 +2174,34 @@ MIN_FLOAT = -3.14e+100
 <p><img src="lab/04/./assets/segmented-text-screenshot.png" alt="分词结果展示" />
 <figcaption>图 3：分词结果展示</figcaption></p>
 </figure>
+<h3 id="不同训练语料的对比"><a class="header" href="#不同训练语料的对比">不同训练语料的对比</a></h3>
+<table>
+<tr>
+<td><figure>
+<p><img src="lab/04/./assets/1.png" alt="分词结果展示" />
+<figcaption>图 4：使用 1 份量语料训练的结果</figcaption></p>
+</figure>
+</td>
+<td><figure>
+<p><img src="lab/04/./assets/3.png" alt="分词结果展示" />
+<figcaption>图 5：使用 3 份量语料训练的结果</figcaption></p>
+</figure>
+</td>
+</tr>
+<tr>
+<td><figure>
+<p><img src="lab/04/./assets/5.png" alt="分词结果展示" />
+<figcaption>图 6：使用 5 份量语料训练的结果</figcaption></p>
+</figure>
+</td>
+<td><figure>
+<p><img src="lab/04/./assets/7.png" alt="分词结果展示" />
+<figcaption>图 7：使用 7 份量语料训练的结果</figcaption></p>
+</figure>
+</td>
+</tr>
+</table>
+<p>观察可得，随着训练语料数量的增加，最开始的效果提升较为显著，而当训练语料数量达到一定程度时，结果的提升不再明显。</p>
 <h2 id="六总结-3"><a class="header" href="#六总结-3">六、总结</a></h2>
 <p>收获颇丰。</p>
 <h2 id="参考文献-2"><a class="header" href="#参考文献-2">参考文献</a></h2>

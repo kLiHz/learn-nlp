@@ -175,9 +175,9 @@
 <h2 id="二实验原理"><a class="header" href="#二实验原理">二、实验原理</a></h2>
 <p>在使用 FMM、BMM 等方式进行基于字典的分词时，总会遇到具有歧义的情况。</p>
 <p>例如，“商品和服务”经过 FMM、BMM 分词，可以有以下的分词结果：</p>
-<table><thead><tr><th align="center">分词方式</th><th align="center">分词结果</th></tr></thead><tbody>
-<tr><td align="center">FMM</td><td align="center">['商品', '和服', '务']</td></tr>
-<tr><td align="center">BMM</td><td align="center">['商品', '和', '服务']</td></tr>
+<table><thead><tr><th style="text-align: center">分词方式</th><th style="text-align: center">分词结果</th></tr></thead><tbody>
+<tr><td style="text-align: center">FMM</td><td style="text-align: center">['商品', '和服', '务']</td></tr>
+<tr><td style="text-align: center">BMM</td><td style="text-align: center">['商品', '和', '服务']</td></tr>
 </tbody></table>
 <p>显然，第二种情况更为合理，因为第二种出现的概率较前一种更高。这便是统计自然语言处理。</p>
 <p>于是，便可以通过对语言进行建模，以评估其出现的概率，进而达到消除歧义的目的。</p>
@@ -276,9 +276,9 @@ P(\text{&lt;EOS&gt;} | \text{book}   ) \)。</p>
 <p>对于某一句话，不同的分词方法，可能会得到不同的结果。结果中的不同之处被视作“歧义”。为了得到相对情况下最为准确的分词结果，需要在每处歧义选择最佳的词元组合。</p>
 <p>我们可以将不同分词结果中的分词情况表示在一张图上。</p>
 <p>下面以对“他是研究生物的”的两种分词结果为例。</p>
-<table><thead><tr><th align="center">分词方式</th><th align="center">分词结果</th></tr></thead><tbody>
-<tr><td align="center">FMM</td><td align="center">['他', '是', '研究生', '物', '的']</td></tr>
-<tr><td align="center">BMM</td><td align="center">['他', '是', '研究', '生物', '的']</td></tr>
+<table><thead><tr><th style="text-align: center">分词方式</th><th style="text-align: center">分词结果</th></tr></thead><tbody>
+<tr><td style="text-align: center">FMM</td><td style="text-align: center">['他', '是', '研究生', '物', '的']</td></tr>
+<tr><td style="text-align: center">BMM</td><td style="text-align: center">['他', '是', '研究', '生物', '的']</td></tr>
 </tbody></table>
 <p>上面两种分词结果可以形成一无环有向图，即下图所示的网络结构。</p>
 <p><img src="assets/word-map-demo.svg" alt="word-map-demo" /></p>
